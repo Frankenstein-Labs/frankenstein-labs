@@ -1,0 +1,6 @@
+[submodule "vendor/coder"]
+	path = vendor/coder
+	url = https://github.com/coder/coder.git
+[submodule "vendor/registry"]
+	path = vendor/registry
+	url = https://github.com/coder/registry.git
