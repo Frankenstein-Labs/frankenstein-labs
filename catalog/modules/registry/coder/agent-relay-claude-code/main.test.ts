@@ -1,0 +1,988 @@
+import { createHash } from "node:crypto";
+import {
+  afterEach,
+  beforeAll,
+  describe,
+  expect,
+  it,
+  setDefaultTimeout,
+} from "bun:test";
+import {
+  execContainer,
+  findResourceInstance,
+  readFileContainer,
+  removeContainer,
+  runContainer,
+  runTerraformApply,
+  runTerraformInit,
+  testRequiredVariables,
+  type TerraformState,
+  writeFileContainer,
+} from "~test";
+
+// The install and start scripts coder-utils wraps are exercised inside a
+// throwaway container with a stub `claude` binary standing in for the
+// Claude Code CLI, so the supervisor lifecycle the relay's reaper depends
+// on (idle, working, done, failed) is observed rather than grepped for.
+// The real installer and the real runner are out of scope: both need the
+// network and Anthropic's side. `coder` is stubbed so the `coder exp sync`
+// ordering calls succeed without a control plane.
+
+let cleanupFunctions: (() => Promise<void>)[] = [];
+const registerCleanup = (cleanup: () => Promise<void>) => {
+  cleanupFunctions.push(cleanup);
+};
+afterEach(async () => {
+  const cleanupFnsCopy = cleanupFunctions.slice().reverse();
+  cleanupFunctions = [];
+  for (const cleanup of cleanupFnsCopy) {
+    try {
+      await cleanup();
+    } catch (error) {
+      console.error("Error during cleanup:", error);
+    }
+  }
+});
+
+// coder-utils pins the layout; the container runs as root.
+const MODULE_DIR = "/root/.coder-modules/coder/agent-relay-claude-code";
+const STATE_FILE = `${MODULE_DIR}/runner-state`;
+const DISPATCH_ENV = [
+  "SELF_HOSTED_RUNNER_ENVIRONMENT_SECRET=test-work-order-jwt",
+  "SELF_HOSTED_RUNNER_LOCK_TO_ACCOUNT=acct-123",
+];
+
+const setup = async (
+  vars: Record<string, string> = {},
+  customEnv?: Record<string, string>,
+) => {
+  const state = await runTerraformApply(
+    import.meta.dir,
+    {
+      agent_id: "foo",
+      ...vars,
+    },
+    customEnv,
+  );
+  const scripts = collectScripts(state);
+  const statusScript = state.outputs.status_metadata_script.value as string;
+  const attachedScript = state.outputs.session_attached_metadata_script
+    .value as string;
+  // The value the agent would export from the coder_env resource.
+  const releaseIdleEnv = `AGENT_RELAY_CLAUDE_CODE_RELEASE_IDLE_SESSION_MIN=${
+    findResourceInstance(
+      state,
+      "coder_env",
+      "agent_relay_claude_code_release_idle_session_min",
+    ).value
+  }`;
+  const id = await runContainer("lorello/alpine-bash");
+  registerCleanup(async () => {
+    await removeContainer(id);
+  });
+  await stubBinary(id, "/usr/local/bin/coder", "exit 0");
+  return { id, scripts, statusScript, attachedScript, releaseIdleEnv };
+};
+
+// How coderd hands a build's parameter values to the coder provider, so a
+// test can stamp a parameter the way Agent Relay does.
+const stampParameter = (name: string, value: string) => ({
+  [`CODER_PARAMETER_${createHash("sha256").update(name).digest("hex")}`]: value,
+});
+
+type Scripts = {
+  cleanup: string;
+  install: string;
+  start: string;
+  stop: string;
+};
+
+// coder-utils owns the coder_script resources; find ours by display name.
+const collectScripts = (state: TerraformState): Scripts => {
+  const byDisplayName: Record<string, string> = {};
+  for (const resource of state.resources) {
+    if (resource.type !== "coder_script") continue;
+    for (const instance of resource.instances) {
+      const attrs = instance.attributes as Record<string, unknown>;
+      byDisplayName[attrs.display_name as string] = attrs.script as string;
+    }
+  }
+  const cleanup = byDisplayName["Claude Code runner: Pre-Install Script"];
+  const install = byDisplayName["Claude Code runner: Install Script"];
+  const start = byDisplayName["Claude Code runner: Start Script"];
+  const stop = byDisplayName["Claude Code runner: Stop Script"];
+  if (!cleanup || !install || !start || !stop) {
+    throw new Error(
+      `expected cleanup, install, start, and stop scripts, found ${Object.keys(byDisplayName)}`,
+    );
+  }
+  return { cleanup, install, start, stop };
+};
+
+const stubBinary = async (id: string, path: string, body: string) => {
+  await writeFileContainer(id, path, `#!/usr/bin/env bash\n${body}\n`, {
+    user: "root",
+  });
+  const chmod = await execContainer(id, ["chmod", "755", path]);
+  expect(chmod.exitCode).toBe(0);
+};
+
+// Installs a fake Claude Code CLI whose body is the given shell snippet.
+const stubClaude = (id: string, body: string) =>
+  stubBinary(id, "/usr/local/bin/claude", body);
+
+// Runs cleanup before install and start, as coder-utils orders them
+// on the agent, and returns the install and start results.
+const runScripts = async (id: string, scripts: Scripts, env: string[]) => {
+  const cleanup = await execContainer(id, ["bash", "-c", scripts.cleanup]);
+  expect(cleanup.exitCode, cleanup.stdout).toBe(0);
+  const install = await execContainer(id, [
+    "env",
+    ...env,
+    "bash",
+    "-c",
+    scripts.install,
+  ]);
+  expect(install.exitCode).toBe(0);
+  const start = await execContainer(id, [
+    "env",
+    ...env,
+    "bash",
+    "-c",
+    scripts.start,
+  ]);
+  return { cleanup, install, start };
+};
+
+const runDispatched = (id: string, scripts: Scripts) =>
+  runScripts(id, scripts, DISPATCH_ENV);
+
+const readState = async (id: string) =>
+  (await readFileContainer(id, STATE_FILE)).trim();
+
+const waitForFile = async (id: string, path: string) => {
+  for (let i = 0; i < 50; i++) {
+    if ((await execContainer(id, ["test", "-s", path])).exitCode === 0) {
+      return readFileContainer(id, path);
+    }
+    await Bun.sleep(100);
+  }
+  throw new Error(`${path} was not written`);
+};
+
+// The supervisor writes terminal state after the runner exits; poll rather
+// than sleep a fixed amount.
+const waitForState = async (id: string, pattern: RegExp, timeoutMs = 5000) => {
+  const deadline = Date.now() + timeoutMs;
+  let last = "";
+  while (Date.now() < deadline) {
+    last = await readState(id);
+    if (pattern.test(last)) {
+      return last;
+    }
+    await Bun.sleep(200);
+  }
+  throw new Error(
+    `state never matched ${pattern}; last was ${JSON.stringify(last)}`,
+  );
+};
+
+setDefaultTimeout(60 * 1000);
+
+describe("agent-relay-claude-code", () => {
+  beforeAll(async () => {
+    await runTerraformInit(import.meta.dir);
+  });
+
+  testRequiredVariables(import.meta.dir, {
+    agent_id: "foo",
+  });
+
+  it("idles when no credential is set", async () => {
+    const { id, scripts } = await setup({ install_cli: "false" });
+    // No SELF_HOSTED_RUNNER_ENVIRONMENT_SECRET: a workspace a human created by hand.
+    const { start } = await runScripts(id, scripts, []);
+    expect(start.exitCode).toBe(0);
+    expect(start.stdout).toContain("No work order in this build");
+    expect(await readState(id)).toBe("idle");
+  });
+
+  it("clears terminal state across a restart without a credential", async () => {
+    // The secret is ephemeral, so an agent restart runs the start step
+    // with no credential. No runner can run without a fresh one, and the
+    // cleanup clears the previous run's state, so a stale "done 3" is
+    // never reported as this run's.
+    const { id, scripts } = await setup({ install_cli: "false" });
+    await execContainer(id, ["mkdir", "-p", MODULE_DIR]);
+    await writeFileContainer(id, STATE_FILE, "done 3\n", { user: "root" });
+    const { start } = await runScripts(id, scripts, []);
+    expect(start.exitCode).toBe(0);
+    expect(await readState(id)).toBe("idle");
+  });
+
+  it("sets no coder_env for the work order's variable", async () => {
+    // The agent injects SELF_HOSTED_RUNNER_ENVIRONMENT_SECRET from the
+    // workspace secret. A coder_env of that name, as 0.x had, would put
+    // the credential back in Terraform state.
+    const state = await runTerraformApply(import.meta.dir, { agent_id: "foo" });
+    const envNames = state.resources
+      .filter((resource) => resource.type === "coder_env")
+      .flatMap((resource) =>
+        resource.instances.map((instance) => instance.attributes.name),
+      );
+    expect(envNames).not.toContain("SELF_HOSTED_RUNNER_ENVIRONMENT_SECRET");
+  });
+
+  it("reports runner-agent-missing when the CLI is absent", async () => {
+    const { id, scripts } = await setup({ install_cli: "false" });
+    const { install, start } = await runDispatched(id, scripts);
+    expect(install.stdout).toContain("expecting 'claude' to be in the image");
+    expect(start.exitCode).toBe(1);
+    // coder-utils merges stderr into the tee'd log.
+    expect(start.stdout).toContain(
+      "The runner binary 'claude' is not available",
+    );
+    expect(await readState(id)).toBe("failed runner-agent-missing");
+  });
+
+  it("finds a bring-your-own CLI in ~/.local/bin when install_cli is false", async () => {
+    // The official installer's location; the module must look there even
+    // when it did not run the installer itself.
+    const { id, scripts } = await setup({ install_cli: "false" });
+    await execContainer(id, ["mkdir", "-p", "/root/.local/bin"]);
+    await stubBinary(id, "/root/.local/bin/claude", "sleep 30");
+    const { start } = await runDispatched(id, scripts);
+    expect(start.exitCode, start.stdout).toBe(0);
+    expect(await readState(id)).toMatch(/^working \d+$/);
+  });
+
+  it("skips the download when the CLI is already present", async () => {
+    // install_cli defaults to true; a binary on PATH must short-circuit it.
+    const { id, scripts } = await setup();
+    await stubClaude(id, "sleep 30");
+    const { install, start } = await runDispatched(id, scripts);
+    expect(install.stdout).toContain(
+      "Claude Code CLI already present; skipping the install.",
+    );
+    expect(install.stdout).not.toContain("installing the latest release");
+    expect(start.exitCode).toBe(0);
+    expect(await readState(id)).toMatch(/^working \d+$/);
+  });
+
+  it("keeps scripts and logs under the module directory", async () => {
+    const { id, scripts } = await setup();
+    await stubClaude(id, "sleep 30");
+    await runDispatched(id, scripts);
+    for (const file of [
+      "scripts/pre_install.sh",
+      "scripts/install.sh",
+      "scripts/start.sh",
+      "logs/pre_install.log",
+      "logs/install.log",
+      "logs/start.log",
+      "logs/runner.log",
+      "supervise.sh",
+      "run-runner.sh",
+      "wrapper.sh",
+      "workers",
+      "runner-state",
+    ]) {
+      const exists = await execContainer(id, [
+        "test",
+        "-e",
+        `${MODULE_DIR}/${file}`,
+      ]);
+      expect(exists.exitCode, file).toBe(0);
+    }
+    const startLog = await readFileContainer(
+      id,
+      `${MODULE_DIR}/logs/start.log`,
+    );
+    expect(startLog).toContain("Starting Claude Code self-hosted runner");
+  });
+
+  it("starts the runner detached through the permissions wrapper", async () => {
+    const { id, scripts } = await setup();
+    await stubClaude(id, 'printf "%s\\n" "$@" >/tmp/claude-args; sleep 30');
+    const { start } = await runDispatched(id, scripts);
+    expect(start.exitCode).toBe(0);
+    expect(start.stdout).toContain(
+      "Starting Claude Code self-hosted runner (detached)...",
+    );
+
+    const args = (await waitForFile(id, "/tmp/claude-args")).split("\n");
+    expect(args[0]).toBe("self-hosted-runner");
+    expect(args[args.indexOf("--capacity") + 1]).toBe("1");
+    expect(args[args.indexOf("--exit-if-unused-min") + 1]).toBe("10");
+    // Without the agent's coder_env value, the module default applies.
+    expect(args[args.indexOf("--release-idle-session-min") + 1]).toBe("60");
+    expect(args[args.indexOf("--exec-path") + 1]).toBe(
+      `${MODULE_DIR}/wrapper.sh`,
+    );
+    // The CLI's own default is /workspace, which the agent user cannot
+    // create; the module points it at a directory it made.
+    expect(args[args.indexOf("--base-dir") + 1]).toBe("/root/workspace");
+    const baseDir = await execContainer(id, ["test", "-d", "/root/workspace"]);
+    expect(baseDir.exitCode).toBe(0);
+
+    // The wrapper is what forces bypassPermissions on every session.
+    const wrapper = await readFileContainer(id, `${MODULE_DIR}/wrapper.sh`);
+    expect(wrapper).toContain("--permission-mode bypassPermissions");
+
+    // Run the wrapper as root against a stub that enforces the CLI's
+    // guard: bypassPermissions is refused for uid 0 unless IS_SANDBOX=1.
+    // The text assertion above cannot catch a missing IS_SANDBOX.
+    await stubBinary(
+      id,
+      "/usr/local/bin/claude-session",
+      [
+        'if [ "$(id -u)" = 0 ] && [ "${IS_SANDBOX:-}" != 1 ]; then',
+        '  echo "--dangerously-skip-permissions cannot be used with root/sudo privileges" >&2',
+        "  exit 1",
+        "fi",
+        'printf "%s\\n" "$@"',
+      ].join("\n"),
+    );
+    const session = await execContainer(id, [
+      "env",
+      "CLAUDE_RUNNER_CLAUDE_BIN=/usr/local/bin/claude-session",
+      `${MODULE_DIR}/wrapper.sh`,
+      "--print",
+      "hi",
+    ]);
+    expect(session.exitCode, session.stderr).toBe(0);
+    expect(session.stdout.split("\n")).toEqual([
+      "--print",
+      "hi",
+      "--permission-mode",
+      "bypassPermissions",
+      "",
+    ]);
+
+    // The runner inherits the CLI's own env var names, not the relay's.
+    const env = await execContainer(id, [
+      "sh",
+      "-c",
+      "cat /proc/$(pgrep -f 'claude self-hosted-runner' | head -1)/environ | tr '\\0' '\\n'",
+    ]);
+    expect(env.stdout).toContain(
+      "SELF_HOSTED_RUNNER_ENVIRONMENT_SECRET=test-work-order-jwt",
+    );
+    expect(env.stdout).toContain("SELF_HOSTED_RUNNER_LOCK_TO_ACCOUNT=acct-123");
+  });
+
+  it("appends additional_args in order, one argument per element", async () => {
+    const { id, scripts } = await setup({
+      additional_args: JSON.stringify([
+        "--name",
+        "two words $HOME",
+        "--name",
+        `it"s`,
+        "--verbose",
+      ]),
+    });
+    await stubClaude(id, 'printf "%s\\n" "$@" >/tmp/claude-args; sleep 30');
+    const { start } = await runDispatched(id, scripts);
+    expect(start.exitCode).toBe(0);
+
+    const args = (await waitForFile(id, "/tmp/claude-args")).split("\n");
+    expect(args[0]).toBe("self-hosted-runner");
+    // A flag can repeat, and arguments reach the CLI verbatim and in order:
+    // no word splitting or expansion.
+    const at = args.indexOf("--name");
+    expect(args.slice(at, at + 5)).toEqual([
+      "--name",
+      "two words $HOME",
+      "--name",
+      'it"s',
+      "--verbose",
+    ]);
+    // Module-set flags still come through, and the wrapper stays last.
+    expect(args[args.indexOf("--capacity") + 1]).toBe("1");
+    expect(args[args.indexOf("--exec-path") + 1]).toBe(
+      `${MODULE_DIR}/wrapper.sh`,
+    );
+  });
+
+  it("records the exit code when the runner exits", async () => {
+    const { id, scripts } = await setup();
+    await stubClaude(id, "exit 3");
+    const { start } = await runDispatched(id, scripts);
+    expect(start.exitCode).toBe(0);
+    expect(await waitForState(id, /^done \d+$/)).toBe("done 3");
+  });
+
+  it("starts even when startup cleanup did not run", async () => {
+    const { id, scripts } = await setup({ install_cli: "false" });
+    await stubClaude(id, "sleep 30");
+    const install = await execContainer(id, ["bash", "-c", scripts.install]);
+    expect(install.exitCode, install.stdout).toBe(0);
+    const start = await execContainer(id, [
+      "env",
+      ...DISPATCH_ENV,
+      "bash",
+      "-c",
+      scripts.start,
+    ]);
+    expect(start.exitCode, start.stdout).toBe(0);
+    expect(start.stdout).toContain("cleanup did not finish");
+    expect(await readState(id)).toMatch(/^working \d+$/);
+  });
+
+  it("starts a new runner when a verified old runner cannot be stopped", async () => {
+    const { id, scripts } = await setup({ install_cli: "false" });
+    await stubClaude(id, "sleep 120");
+    const first = await runDispatched(id, scripts);
+    expect(first.start.exitCode).toBe(0);
+    const oldPid = Number(
+      (await waitForState(id, /^working \d+$/)).split(" ")[1],
+    );
+
+    // Run the materialized common cleanup with signals suppressed. The old
+    // runner stays alive, but startup must still publish a fresh generation.
+    const cleanup = await execContainer(id, [
+      "bash",
+      "-c",
+      `kill() { return 1; }; sleep() { :; }; source ${MODULE_DIR}/scripts/pre_install.sh`,
+    ]);
+    expect(cleanup.exitCode, cleanup.stdout).toBe(0);
+    expect(cleanup.stderr).toContain("may still be running");
+    expect(
+      (await execContainer(id, ["kill", "-0", String(oldPid)])).exitCode,
+    ).toBe(0);
+
+    const second = await execContainer(id, [
+      "env",
+      ...DISPATCH_ENV,
+      "bash",
+      "-c",
+      scripts.start,
+    ]);
+    expect(second.exitCode, second.stdout).toBe(0);
+    const newPid = Number(
+      (await waitForState(id, /^working \d+$/)).split(" ")[1],
+    );
+    expect(newPid).not.toBe(oldPid);
+    expect(
+      (await execContainer(id, ["kill", "-0", String(oldPid)])).exitCode,
+    ).toBe(0);
+  });
+
+  it("retains unverifiable records without blocking a new runner", async () => {
+    const { id, scripts } = await setup({ install_cli: "false" });
+    await stubClaude(id, "sleep 30");
+    const record = `${MODULE_DIR}/workers/unverifiable`;
+    await execContainer(id, ["mkdir", "-p", `${MODULE_DIR}/workers`]);
+    await writeFileContainer(id, record, "not a pid\n", { user: "root" });
+
+    const first = await runDispatched(id, scripts);
+    expect(first.start.exitCode, first.start.stdout).toBe(0);
+    expect(first.cleanup.stdout).toContain("unverifiable");
+    expect(await readFileContainer(id, record)).toBe("not a pid\n");
+    expect(await waitForState(id, /^working \d+$/)).toMatch(/^working \d+$/);
+  });
+
+  it("stops the runner and clears state without permitting another start", async () => {
+    const { id, scripts } = await setup({ install_cli: "false" });
+    await stubClaude(id, "sleep 120");
+    const first = await runDispatched(id, scripts);
+    expect(first.start.exitCode).toBe(0);
+    const oldPid = Number(
+      (await waitForState(id, /^working \d+$/)).split(" ")[1],
+    );
+
+    const stop = await execContainer(id, ["bash", "-c", scripts.stop]);
+    expect(stop.exitCode, stop.stdout).toBe(0);
+    expect(
+      (await execContainer(id, ["test", "-e", STATE_FILE])).exitCode,
+    ).not.toBe(0);
+    expect(
+      (
+        await execContainer(id, [
+          "test",
+          "-e",
+          `${MODULE_DIR}/cleanup-complete`,
+        ])
+      ).exitCode,
+    ).not.toBe(0);
+    const oldStat = await execContainer(id, [
+      "bash",
+      "-c",
+      `test ! -e /proc/${oldPid}/stat || grep -q ') Z ' /proc/${oldPid}/stat`,
+    ]);
+    expect(oldStat.exitCode).toBe(0);
+
+    const start = await execContainer(id, [
+      "env",
+      ...DISPATCH_ENV,
+      "bash",
+      "-c",
+      scripts.start,
+    ]);
+    expect(start.exitCode, start.stdout).toBe(0);
+    expect(await waitForState(id, /^working \d+$/)).not.toBe(
+      `working ${oldPid}`,
+    );
+  });
+
+  it("starts a new generation when cleanup is skipped after a previous start", async () => {
+    const { id, scripts } = await setup({ install_cli: "false" });
+    await stubClaude(id, "sleep 120");
+    const first = await runDispatched(id, scripts);
+    expect(first.start.exitCode).toBe(0);
+    const oldPid = Number(
+      (await waitForState(id, /^working \d+$/)).split(" ")[1],
+    );
+    const oldGeneration = (
+      await readFileContainer(id, `${MODULE_DIR}/cleanup-complete`)
+    ).trim();
+
+    const repeated = await execContainer(id, [
+      "env",
+      ...DISPATCH_ENV,
+      "bash",
+      "-c",
+      scripts.start,
+    ]);
+    expect(repeated.exitCode, repeated.stdout).toBe(0);
+    expect(repeated.stdout).toContain("already started");
+    const newGeneration = (
+      await readFileContainer(id, `${MODULE_DIR}/cleanup-complete`)
+    ).trim();
+    expect(newGeneration).not.toBe(oldGeneration);
+    const newPid = Number(
+      (await waitForState(id, /^working \d+$/)).split(" ")[1],
+    );
+    expect(newPid).not.toBe(oldPid);
+    expect(
+      (await execContainer(id, ["kill", "-0", String(oldPid)])).exitCode,
+    ).toBe(0);
+  });
+
+  it("rejects a late launch from the previous cleanup generation", async () => {
+    const { id, scripts } = await setup({ install_cli: "false" });
+    await stubClaude(id, "printf x >>/tmp/runner-launches");
+    const first = await runDispatched(id, scripts);
+    expect(first.start.exitCode).toBe(0);
+    const oldGeneration = (
+      await readFileContainer(id, `${MODULE_DIR}/cleanup-complete`)
+    ).trim();
+    const nextCleanup = await execContainer(id, [
+      "bash",
+      "-c",
+      scripts.cleanup,
+    ]);
+    expect(nextCleanup.exitCode).toBe(0);
+    expect(
+      (await readFileContainer(id, `${MODULE_DIR}/cleanup-complete`)).trim(),
+    ).not.toBe(oldGeneration);
+
+    const lateSupervisor = await execContainer(id, [
+      "bash",
+      `${MODULE_DIR}/supervise.sh`,
+      oldGeneration,
+    ]);
+    expect(lateSupervisor.exitCode).toBe(0);
+    const lateWorker = await execContainer(id, [
+      "bash",
+      `${MODULE_DIR}/run-runner.sh`,
+      oldGeneration,
+    ]);
+    expect(lateWorker.exitCode).toBe(0);
+    expect((await readFileContainer(id, "/tmp/runner-launches")).trim()).toBe(
+      "x",
+    );
+    expect(
+      (await execContainer(id, ["test", "-e", STATE_FILE])).exitCode,
+    ).not.toBe(0);
+  });
+
+  it("replaces a runner orphaned by a killed supervisor", async () => {
+    const { id, scripts } = await setup({ install_cli: "false" });
+    await stubClaude(id, "sleep 120");
+    const first = await runDispatched(id, scripts);
+    expect(first.start.exitCode, first.start.stdout).toBe(0);
+    const oldPid = Number(
+      (await waitForState(id, /^working \d+$/)).split(" ")[1],
+    );
+    const workerRecords = await execContainer(id, [
+      "bash",
+      "-c",
+      `printf '%s\\n' ${MODULE_DIR}/workers/*`,
+    ]);
+    expect(workerRecords.stdout).toContain(`${MODULE_DIR}/workers/${oldPid}-`);
+    expect(workerRecords.stdout).not.toContain(".tmp");
+    const records = await execContainer(id, [
+      "bash",
+      "-c",
+      `printf '%s\\n' ${MODULE_DIR}/supervisors/*`,
+    ]);
+    const supervisorPid = Number(
+      (await readFileContainer(id, records.stdout.trim())).split(" ")[0],
+    );
+    expect(
+      (await execContainer(id, ["kill", "-KILL", String(supervisorPid)]))
+        .exitCode,
+    ).toBe(0);
+    expect(
+      (await execContainer(id, ["kill", "-0", String(oldPid)])).exitCode,
+    ).toBe(0);
+
+    const second = await runDispatched(id, scripts);
+    expect(second.start.exitCode, second.start.stdout).toBe(0);
+    const newPid = Number(
+      (await waitForState(id, /^working \d+$/)).split(" ")[1],
+    );
+    expect(newPid).not.toBe(oldPid);
+    const oldStat = await execContainer(id, [
+      "bash",
+      "-c",
+      `test ! -e /proc/${oldPid}/stat || grep -q ') Z ' /proc/${oldPid}/stat`,
+    ]);
+    expect(oldStat.exitCode).toBe(0);
+  });
+
+  it("stops the detached runner before starting another one", async () => {
+    const { id, scripts } = await setup({ install_cli: "false" });
+    await stubClaude(id, "sleep 120");
+    const first = await runDispatched(id, scripts);
+    expect(first.start.exitCode, first.start.stdout).toBe(0);
+    const oldPid = Number((await readState(id)).split(" ")[1]);
+
+    const second = await runDispatched(id, scripts);
+    expect(second.start.exitCode, second.start.stdout).toBe(0);
+    const newPid = Number((await readState(id)).split(" ")[1]);
+    expect(newPid).not.toBe(oldPid);
+    const oldProcess = await execContainer(id, [
+      "test",
+      "-e",
+      `/proc/${oldPid}/stat`,
+    ]);
+    expect(oldProcess.exitCode).not.toBe(0);
+  });
+
+  it("force-stops a runner that ignores TERM before relaunch", async () => {
+    const { id, scripts } = await setup({ install_cli: "false" });
+    await stubClaude(id, "trap '' TERM; sleep 120");
+    const first = await runDispatched(id, scripts);
+    expect(first.start.exitCode).toBe(0);
+    const oldPid = Number(
+      (await waitForState(id, /^working \d+$/)).split(" ")[1],
+    );
+
+    const second = await runDispatched(id, scripts);
+    expect(second.start.exitCode).toBe(0);
+    const newPid = Number(
+      (await waitForState(id, /^working \d+$/)).split(" ")[1],
+    );
+    expect(newPid).not.toBe(oldPid);
+    const oldStat = await execContainer(id, [
+      "bash",
+      "-c",
+      `test ! -e /proc/${oldPid}/stat || grep -q ') Z ' /proc/${oldPid}/stat`,
+    ]);
+    expect(oldStat.exitCode).toBe(0);
+  }, 90_000);
+
+  it("ignores stale supervisor and runner records with reused PIDs", async () => {
+    const { id, scripts } = await setup({ install_cli: "false" });
+    await execContainer(id, [
+      "mkdir",
+      "-p",
+      `${MODULE_DIR}/supervisors`,
+      `${MODULE_DIR}/workers`,
+    ]);
+    const stale = `1 ${await readFileContainer(id, "/proc/sys/kernel/random/boot_id").then((s) => s.trim())} 1\n`;
+    for (const kind of ["supervisors", "workers"]) {
+      await writeFileContainer(id, `${MODULE_DIR}/${kind}/stale`, stale, {
+        user: "root",
+      });
+    }
+    await writeFileContainer(id, STATE_FILE, "done 0\n", { user: "root" });
+    const cleanup = await execContainer(id, ["bash", "-c", scripts.cleanup]);
+    expect(cleanup.exitCode, cleanup.stdout).toBe(0);
+    expect(
+      (await execContainer(id, ["test", "-e", STATE_FILE])).exitCode,
+    ).not.toBe(0);
+    expect(
+      (await execContainer(id, ["test", "-e", "/proc/1/stat"])).exitCode,
+    ).toBe(0);
+    for (const kind of ["supervisors", "workers"]) {
+      expect(
+        (await execContainer(id, ["test", "-e", `${MODULE_DIR}/${kind}/stale`]))
+          .exitCode,
+      ).not.toBe(0);
+    }
+  });
+
+  it("uses cli_binary and state_file overrides", async () => {
+    const { id, scripts } = await setup({
+      cli_binary: "/opt/claude/claude",
+      state_file: "/var/lib/relay/state",
+    });
+    await execContainer(id, ["mkdir", "-p", "/opt/claude"]);
+    await stubBinary(id, "/opt/claude/claude", "sleep 30");
+    const { start } = await runDispatched(id, scripts);
+    expect(start.exitCode).toBe(0);
+    const state = (await readFileContainer(id, "/var/lib/relay/state")).trim();
+    expect(state).toMatch(/^working \d+$/);
+  });
+
+  it("treats serving_log_pattern as data, not shell or regex", async () => {
+    // A pattern carrying shell metacharacters must neither execute nor be
+    // read as a regex; it is matched as a fixed string against the log.
+    const pattern = 'x"; touch /tmp/PWNED; "';
+    const { id, scripts, statusScript } = await setup({
+      serving_log_pattern: pattern,
+    });
+    await stubClaude(id, "sleep 30");
+    await runDispatched(id, scripts);
+    expect(await readState(id)).toMatch(/^working \d+$/);
+
+    const status = (log: string) =>
+      execContainer(id, [
+        "sh",
+        "-c",
+        `printf '%s\\n' "$1" >${MODULE_DIR}/logs/runner.log && bash -c "$2"`,
+        "sh",
+        log,
+        statusScript,
+      ]);
+
+    const noMatch = await status("Waiting for work");
+    expect(noMatch.exitCode, noMatch.stderr).toBe(0);
+    expect(noMatch.stdout.trim()).toBe("working");
+
+    // Only the literal pattern flips the state to serving.
+    const match = await status(`log line ${pattern} tail`);
+    expect(match.exitCode, match.stderr).toBe(0);
+    expect(match.stdout.trim()).toBe("serving");
+
+    const pwned = await execContainer(id, ["test", "-e", "/tmp/PWNED"]);
+    expect(pwned.exitCode).not.toBe(0);
+  });
+
+  describe("release_idle_session_min", () => {
+    const PARAMETER = "agent_relay_claude_code_release_idle_session_min";
+
+    // Starts a dispatched runner with the environment the agent would
+    // export and returns the argv the CLI received.
+    const runnerArgv = async (
+      vars: Record<string, string> = {},
+      customEnv?: Record<string, string>,
+    ) => {
+      const { id, scripts, releaseIdleEnv } = await setup(vars, customEnv);
+      await stubClaude(id, 'printf "%s\\n" "$@" >/tmp/claude-args; sleep 30');
+      const { start } = await runScripts(id, scripts, [
+        ...DISPATCH_ENV,
+        releaseIdleEnv,
+      ]);
+      expect(start.exitCode, start.stdout).toBe(0);
+      return (await readFileContainer(id, "/tmp/claude-args")).split("\n");
+    };
+
+    const releaseValues = (args: string[]) =>
+      args.flatMap((arg, i) =>
+        arg === "--release-idle-session-min" ? [args[i + 1]] : [],
+      );
+
+    it("releases an idle session after 60 minutes by default", async () => {
+      const args = await runnerArgv();
+      expect(releaseValues(args)).toEqual(["60"]);
+    });
+
+    it("uses the module variable", async () => {
+      const args = await runnerArgv({ release_idle_session_min: "15" });
+      expect(releaseValues(args)).toEqual(["15"]);
+    });
+
+    it("omits the flag when 0", async () => {
+      const args = await runnerArgv({ release_idle_session_min: "0" });
+      expect(args[0]).toBe("self-hosted-runner");
+      expect(releaseValues(args)).toEqual([]);
+    });
+
+    it("prefers the value Agent Relay stamps on the build", async () => {
+      const stamped = await runnerArgv({}, stampParameter(PARAMETER, "30"));
+      expect(releaseValues(stamped)).toEqual(["30"]);
+
+      const disabled = await runnerArgv(
+        { release_idle_session_min: "15" },
+        stampParameter(PARAMETER, "0"),
+      );
+      expect(releaseValues(disabled)).toEqual([]);
+    });
+
+    it("rejects a stamp outside the CLI's bound at build time", async () => {
+      for (const value of ["10081", "-1", "1.5"]) {
+        await expect(
+          runTerraformApply(
+            import.meta.dir,
+            { agent_id: "foo" },
+            stampParameter(PARAMETER, value),
+          ),
+          value,
+        ).rejects.toThrow(/from 0 to 10080/);
+      }
+    });
+
+    it("normalizes the value from the environment", async () => {
+      const { id, scripts } = await setup();
+      await stubClaude(id, 'printf "%s\\n" "$@" >/tmp/claude-args; sleep 30');
+      const { start } = await runScripts(id, scripts, [
+        ...DISPATCH_ENV,
+        "AGENT_RELAY_CLAUDE_CODE_RELEASE_IDLE_SESSION_MIN=+009",
+      ]);
+      expect(start.exitCode, start.stdout).toBe(0);
+      const args = (await readFileContainer(id, "/tmp/claude-args")).split(
+        "\n",
+      );
+      expect(releaseValues(args)).toEqual(["9"]);
+    });
+
+    it("refuses an invalid value from the environment", async () => {
+      // The build validates the parameter; this guards the script against a
+      // value that reached the environment some other way.
+      for (const value of ["5; touch /tmp/PWNED", "10081", "-1", "abc"]) {
+        const { id, scripts } = await setup();
+        await stubClaude(id, "touch /tmp/runner-started; sleep 30");
+        const { start } = await runScripts(id, scripts, [
+          ...DISPATCH_ENV,
+          `AGENT_RELAY_CLAUDE_CODE_RELEASE_IDLE_SESSION_MIN=${value}`,
+        ]);
+        expect(start.exitCode, value).toBe(1);
+        expect(start.stdout).toContain("from 0 to 10080");
+        expect(await readState(id)).toBe(
+          "failed invalid-release-idle-session-min",
+        );
+        for (const marker of ["/tmp/PWNED", "/tmp/runner-started"]) {
+          const exists = await execContainer(id, ["test", "-e", marker]);
+          expect(exists.exitCode, `${value}: ${marker}`).not.toBe(0);
+        }
+      }
+    });
+  });
+
+  describe("session_attached_metadata_script", () => {
+    // Stands in for the runner's listener. The body comes from a file the
+    // test writes; a missing file is a failed scrape, and any other URL is
+    // a wiring bug.
+    const stubHealthz = (id: string, url: string) =>
+      stubBinary(
+        id,
+        "/usr/local/bin/curl",
+        [
+          `case "$*" in *"${url}/healthz"*) ;; *) echo "unexpected curl $*" >&2; exit 7 ;; esac`,
+          "[ -f /tmp/healthz ] || exit 22",
+          "cat /tmp/healthz",
+        ].join("\n"),
+      );
+
+    const sample = async (id: string, script: string, body?: string) => {
+      if (body === undefined) {
+        await execContainer(id, ["rm", "-f", "/tmp/healthz"]);
+      } else {
+        await writeFileContainer(id, "/tmp/healthz", body, { user: "root" });
+      }
+      return execContainer(id, ["bash", "-c", script]);
+    };
+
+    const runnerArgs = async (id: string) =>
+      (await readFileContainer(id, "/tmp/claude-args")).split("\n");
+
+    it("reads active_sessions from the live runner's listener", async () => {
+      const { id, scripts, attachedScript } = await setup({
+        health_port: "3290",
+      });
+      await stubClaude(id, 'printf "%s\\n" "$@" >/tmp/claude-args; sleep 30');
+      await stubHealthz(id, "http://127.0.0.1:3290");
+      await runDispatched(id, scripts);
+      const args = await runnerArgs(id);
+      expect(args[args.indexOf("--health-port") + 1]).toBe("3290");
+
+      // The body shape a real 2.1.310 runner returns.
+      const held = await sample(
+        id,
+        attachedScript,
+        '{"status":"ok","runner_id":"ccrunner_x","active_sessions":1,"last_poll_at":"2026-10-26T20:22:54.950Z","last_poll_age_ms":24021}',
+      );
+      expect(held.exitCode, held.stderr).toBe(0);
+      expect(held.stdout.trim()).toBe("attached");
+
+      const free = await sample(
+        id,
+        attachedScript,
+        '{"status":"ok","active_sessions":0}',
+      );
+      expect(free.exitCode, free.stderr).toBe(0);
+      expect(free.stdout.trim()).toBe("unattached");
+
+      // Unknown is an error sample, never false, so the relay can tell a
+      // broken probe from an ended session.
+      const unreachable = await sample(id, attachedScript);
+      expect(unreachable.exitCode).not.toBe(0);
+      expect(unreachable.stdout.trim()).toBe("");
+
+      const malformed = await sample(id, attachedScript, '{"status":"ok"}');
+      expect(malformed.exitCode).not.toBe(0);
+      expect(malformed.stdout.trim()).toBe("");
+    });
+
+    it("reports stopped once the runner exits", async () => {
+      const { id, scripts, attachedScript } = await setup();
+      await stubClaude(id, "exit 0");
+      await stubHealthz(id, "http://127.0.0.1:3286");
+      await runDispatched(id, scripts);
+      await waitForState(id, /^done \d+$/);
+      const result = await sample(
+        id,
+        attachedScript,
+        '{"status":"ok","active_sessions":1}',
+      );
+      expect(result.exitCode, result.stderr).toBe(0);
+      expect(result.stdout.trim()).toBe("stopped");
+    });
+
+    it("reports stopped without a live runner", async () => {
+      const { id, attachedScript } = await setup({ install_cli: "false" });
+      await stubHealthz(id, "http://127.0.0.1:3286");
+      await execContainer(id, ["mkdir", "-p", MODULE_DIR]);
+      // The listener would claim a session; with no live runner it is
+      // never consulted. "working 1" is a live pid that is not the CLI,
+      // as after pid reuse.
+      const body = '{"status":"ok","active_sessions":1}';
+      for (const state of [
+        undefined,
+        "idle",
+        "done 0",
+        "failed runner-agent-missing",
+        "working 999999",
+        "working 1",
+      ]) {
+        if (state === undefined) {
+          await execContainer(id, ["rm", "-f", STATE_FILE]);
+        } else {
+          await writeFileContainer(id, STATE_FILE, `${state}\n`, {
+            user: "root",
+          });
+        }
+        const result = await sample(id, attachedScript, body);
+        expect(result.exitCode, `${state}: ${result.stderr}`).toBe(0);
+        expect(result.stdout.trim(), String(state)).toBe("stopped");
+      }
+    });
+
+    it("reports disabled when health_port is 0", async () => {
+      const { id, scripts, attachedScript } = await setup({ health_port: "0" });
+      await stubClaude(id, 'printf "%s\\n" "$@" >/tmp/claude-args; sleep 30');
+      await stubBinary(id, "/usr/local/bin/curl", "exit 99");
+      await runDispatched(id, scripts);
+      // The CLI listens on 8080 unless told 0.
+      const args = await runnerArgs(id);
+      expect(args[args.indexOf("--health-port") + 1]).toBe("0");
+      const result = await execContainer(id, ["bash", "-c", attachedScript]);
+      expect(result.exitCode, result.stderr).toBe(0);
+      expect(result.stdout.trim()).toBe("disabled");
+    });
+  });
+});

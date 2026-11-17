@@ -1,0 +1,180 @@
+terraform {
+  required_version = ">= 1.9"
+
+  required_providers {
+    coder = {
+      source  = "coder/coder"
+      version = ">= 2.5"
+    }
+  }
+}
+
+variable "display_name" {
+  type        = string
+  description = "The display name for the Web RDP application."
+  default     = "Web RDP"
+}
+
+variable "slug" {
+  type        = string
+  description = "The slug for the Web RDP application."
+  default     = "web-rdp"
+}
+
+variable "icon" {
+  type        = string
+  description = "The icon for the Web RDP application."
+  default     = "/icon/desktop.svg"
+}
+
+variable "order" {
+  type        = number
+  description = "The order determines the position of app in the UI presentation. The lowest order is shown first and apps with equal order are sorted by name (ascending order)."
+  default     = null
+}
+
+variable "group" {
+  type        = string
+  description = "The name of a group that this app belongs to."
+  default     = null
+}
+
+variable "share" {
+  type    = string
+  default = "owner"
+  validation {
+    condition     = var.share == "owner" || var.share == "authenticated" || var.share == "public"
+    error_message = "Incorrect value. Please set either 'owner', 'authenticated', or 'public'."
+  }
+}
+
+variable "agent_id" {
+  type        = string
+  description = "The ID of a Coder agent."
+}
+
+variable "agent_name" {
+  description = "The name of the Coder agent used for native RDP connections. Required when enable_native_rdp is true."
+  type        = string
+  default     = null
+
+  validation {
+    condition     = !var.enable_native_rdp || var.agent_name != null
+    error_message = "agent_name must be set when enable_native_rdp is true."
+  }
+}
+
+variable "enable_native_rdp" {
+  description = "Add an app button that opens the workspace in a native RDP client through Coder Desktop."
+  type        = bool
+  default     = true
+}
+
+variable "tooltip" {
+  description = "Markdown text displayed when hovering over the native RDP app."
+  type        = string
+  default     = "You need to install [Coder Desktop](https://coder.com/docs/user-guides/desktop) to use this button."
+}
+
+variable "admin_username" {
+  type    = string
+  default = "Administrator"
+}
+
+variable "admin_password" {
+  type      = string
+  default   = "coderRDP!"
+  sensitive = true
+}
+
+variable "devolutions_gateway_version" {
+  type        = string
+  default     = "latest"
+  description = "Version of Devolutions Gateway to install. Use 'latest' for the most recent version, or specify a version like '2025.3.2'."
+}
+
+locals {
+  # The Devolutions patch script embeds these values inside double-quoted JS
+  # string literals. jsonencode escapes backslashes, quotes, control characters,
+  # and HTML-significant characters; the outer quotes are trimmed because the JS
+  # file supplies its own.
+  js_admin_username = trimsuffix(trimprefix(jsonencode(var.admin_username), "\""), "\"")
+  js_admin_password = trimsuffix(trimprefix(jsonencode(var.admin_password), "\""), "\"")
+
+  # The installation script passes these values as PowerShell single-quoted
+  # strings, which are literal apart from the single quote itself. Doubling the
+  # single quotes keeps values containing $, backticks, or double quotes intact.
+  ps_admin_username = replace(var.admin_username, "'", "''")
+  ps_admin_password = replace(var.admin_password, "'", "''")
+
+  # Terraform still evaluates the disabled resource configuration. This
+  # placeholder keeps URL interpolation valid when native RDP is disabled.
+  native_rdp_agent_name = var.agent_name != null ? var.agent_name : ""
+}
+
+data "coder_workspace" "me" {
+  count = var.enable_native_rdp ? 1 : 0
+}
+
+resource "coder_script" "windows-rdp" {
+  agent_id     = var.agent_id
+  display_name = "windows-rdp"
+  icon         = "/icon/rdp.svg"
+
+  script = templatefile("${path.module}/powershell-installation-script.tftpl", {
+    admin_username              = local.ps_admin_username
+    admin_password              = local.ps_admin_password
+    devolutions_gateway_version = var.devolutions_gateway_version
+
+    # Wanted to have this be in the powershell template file, but Terraform
+    # doesn't allow recursive calls to the templatefile function. Have to feed
+    # results of the JS template replace into the powershell template
+    patch_file_contents = templatefile("${path.module}/devolutions-patch.js", {
+      CODER_USERNAME = local.js_admin_username
+      CODER_PASSWORD = local.js_admin_password
+    })
+  })
+
+  run_on_start = true
+}
+
+resource "coder_app" "windows-rdp" {
+  agent_id     = var.agent_id
+  share        = var.share
+  slug         = var.slug
+  display_name = var.display_name
+  url          = "http://localhost:7171"
+  icon         = var.icon
+  subdomain    = true
+  order        = var.order
+  group        = var.group
+
+  healthcheck {
+    url       = "http://localhost:7171"
+    interval  = 5
+    threshold = 15
+  }
+}
+
+resource "coder_app" "native-rdp" {
+  count = var.enable_native_rdp ? 1 : 0
+
+  agent_id     = var.agent_id
+  display_name = "RDP Desktop"
+  slug         = "rdp-desktop"
+  icon         = "/icon/rdp.svg"
+  external     = true
+  order        = var.order
+  group        = var.group
+  tooltip      = var.tooltip
+  url          = "coder://${regex("https?:\\/\\/([^\\/]+)", data.coder_workspace.me[0].access_url)[0]}/v0/open/ws/${data.coder_workspace.me[0].name}/agent/${local.native_rdp_agent_name}/rdp?username=${urlencode(var.admin_username)}&password=${urlencode(var.admin_password)}"
+}
+
+resource "coder_app" "rdp-docs" {
+  agent_id     = var.agent_id
+  display_name = "Local RDP Docs"
+  slug         = "rdp-docs"
+  icon         = "/icon/windows.svg"
+  url          = "https://coder.com/docs/user-guides/workspace-access/remote-desktops#rdp"
+  external     = true
+}

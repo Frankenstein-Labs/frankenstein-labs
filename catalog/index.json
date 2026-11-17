@@ -1,0 +1,2510 @@
+{
+  "generatedAt": "2026-11-17T18:19:12.291Z",
+  "sources": {
+    "coder": {
+      "repository": "https://github.com/coder/coder",
+      "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f"
+    },
+    "registry": {
+      "repository": "https://github.com/coder/registry",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c"
+    }
+  },
+  "templates": [
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "aws-devcontainer",
+      "path": "catalog/templates/coder/aws-devcontainer",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/aws-devcontainer",
+      "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "architecture.svg",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "aws-linux",
+      "path": "catalog/templates/coder/aws-linux",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/aws-linux",
+      "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "aws-multi-agent",
+      "path": "catalog/templates/coder/aws-multi-agent",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/aws-multi-agent",
+      "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "aws-windows",
+      "path": "catalog/templates/coder/aws-windows",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/aws-windows",
+      "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "azure-linux",
+      "path": "catalog/templates/coder/azure-linux",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/azure-linux",
+      "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "azure-windows",
+      "path": "catalog/templates/coder/azure-windows",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/azure-windows",
+      "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
+      "license": null,
+      "description": "---",
+      "files": [
+        "FirstLogonCommands.xml",
+        "Initialize.ps1.tftpl",
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "digitalocean-linux",
+      "path": "catalog/templates/coder/digitalocean-linux",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/digitalocean-linux",
+      "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "cloud-config.yaml.tftpl",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "docker",
+      "path": "catalog/templates/coder/docker",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/docker",
+      "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "docker-devcontainer",
+      "path": "catalog/templates/coder/docker-devcontainer",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/docker-devcontainer",
+      "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "docker-envbuilder",
+      "path": "catalog/templates/coder/docker-envbuilder",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/docker-envbuilder",
+      "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "gcp-devcontainer",
+      "path": "catalog/templates/coder/gcp-devcontainer",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/gcp-devcontainer",
+      "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "architecture.svg",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "gcp-linux",
+      "path": "catalog/templates/coder/gcp-linux",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/gcp-linux",
+      "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "gcp-vm-container",
+      "path": "catalog/templates/coder/gcp-vm-container",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/gcp-vm-container",
+      "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "gcp-windows",
+      "path": "catalog/templates/coder/gcp-windows",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/gcp-windows",
+      "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "incus",
+      "path": "catalog/templates/coder/incus",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/incus",
+      "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "kubernetes",
+      "path": "catalog/templates/coder/kubernetes",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/kubernetes",
+      "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "kubernetes-devcontainer",
+      "path": "catalog/templates/coder/kubernetes-devcontainer",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/kubernetes-devcontainer",
+      "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "kubernetes-envbox",
+      "path": "catalog/templates/coder/kubernetes-envbox",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/kubernetes-envbox",
+      "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "kubernetes-podman-rootless",
+      "path": "catalog/templates/coder/kubernetes-podman-rootless",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/kubernetes-podman-rootless",
+      "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "nomad-docker",
+      "path": "catalog/templates/coder/nomad-docker",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/nomad-docker",
+      "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf",
+        "workspace.nomad.tpl"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "quickstart",
+      "path": "catalog/templates/coder/quickstart",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/quickstart",
+      "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "install-languages.sh.tftpl",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "scratch",
+      "path": "catalog/templates/coder/scratch",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/scratch",
+      "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "x",
+      "path": "catalog/templates/coder/x",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/x",
+      "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
+      "license": null,
+      "description": "Templates in this directory are experimental and may change or be removed without notice.",
+      "files": [
+        "README.md"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "anis",
+      "name": "oci-vm",
+      "path": "catalog/templates/registry/anis/oci-vm",
+      "source": "https://github.com/coder/registry/tree/main/registry/anis/templates/oci-vm",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "anis",
+      "name": "vmware-linux",
+      "path": "catalog/templates/registry/anis/vmware-linux",
+      "source": "https://github.com/coder/registry/tree/main/registry/anis/templates/vmware-linux",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "bpmct",
+      "name": "incus-nixos",
+      "path": "catalog/templates/registry/bpmct/incus-nixos",
+      "source": "https://github.com/coder/registry/tree/main/registry/bpmct/templates/incus-nixos",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "bpmct",
+      "name": "incus-vm",
+      "path": "catalog/templates/registry/bpmct/incus-vm",
+      "source": "https://github.com/coder/registry/tree/main/registry/bpmct/templates/incus-vm",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "bpmct",
+      "name": "railway",
+      "path": "catalog/templates/registry/bpmct/railway",
+      "source": "https://github.com/coder/registry/tree/main/registry/bpmct/templates/railway",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "aws-envbuilder",
+      "path": "catalog/templates/registry/coder/aws-envbuilder",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/aws-envbuilder",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "aws-linux",
+      "path": "catalog/templates/registry/coder/aws-linux",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/aws-linux",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "PREREQUISITES.md",
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "aws-windows",
+      "path": "catalog/templates/registry/coder/aws-windows",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/aws-windows",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "azure-linux",
+      "path": "catalog/templates/registry/coder/azure-linux",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/azure-linux",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "azure-windows",
+      "path": "catalog/templates/registry/coder/azure-windows",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/azure-windows",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "FirstLogonCommands.xml",
+        "Initialize.ps1.tftpl",
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "digitalocean-linux",
+      "path": "catalog/templates/registry/coder/digitalocean-linux",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/digitalocean-linux",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "cloud-config.yaml.tftpl",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "docker",
+      "path": "catalog/templates/registry/coder/docker",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/docker",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "docker-agent-relay",
+      "path": "catalog/templates/registry/coder/docker-agent-relay",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/docker-agent-relay",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "docker-envbuilder",
+      "path": "catalog/templates/registry/coder/docker-envbuilder",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/docker-envbuilder",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "docker-rstudio",
+      "path": "catalog/templates/registry/coder/docker-rstudio",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/docker-rstudio",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "gcp-envbuilder",
+      "path": "catalog/templates/registry/coder/gcp-envbuilder",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/gcp-envbuilder",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "gcp-linux",
+      "path": "catalog/templates/registry/coder/gcp-linux",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/gcp-linux",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "gcp-vm-container",
+      "path": "catalog/templates/registry/coder/gcp-vm-container",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/gcp-vm-container",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "gcp-windows",
+      "path": "catalog/templates/registry/coder/gcp-windows",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/gcp-windows",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "incus",
+      "path": "catalog/templates/registry/coder/incus",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/incus",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "kubernetes",
+      "path": "catalog/templates/registry/coder/kubernetes",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/kubernetes",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "kubernetes-agent-relay",
+      "path": "catalog/templates/registry/coder/kubernetes-agent-relay",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/kubernetes-agent-relay",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "kubernetes-envbox",
+      "path": "catalog/templates/registry/coder/kubernetes-envbox",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/kubernetes-envbox",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "kubernetes-envbuilder",
+      "path": "catalog/templates/registry/coder/kubernetes-envbuilder",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/kubernetes-envbuilder",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "nomad-docker",
+      "path": "catalog/templates/registry/coder/nomad-docker",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/nomad-docker",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf",
+        "workspace.nomad.tpl"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "openshift",
+      "path": "catalog/templates/registry/coder/openshift",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/openshift",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf",
+        "main.tftest.hcl",
+        "parameters.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "scratch",
+      "path": "catalog/templates/registry/coder/scratch",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/scratch",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder-labs",
+      "name": "aws-fargate",
+      "path": "catalog/templates/registry/coder-labs/aws-fargate",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/templates/aws-fargate",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder-labs",
+      "name": "aws-nixos",
+      "path": "catalog/templates/registry/coder-labs/aws-nixos",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/templates/aws-nixos",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder-labs",
+      "name": "coder-cli",
+      "path": "catalog/templates/registry/coder-labs/coder-cli",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/templates/coder-cli",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder-labs",
+      "name": "docker-build",
+      "path": "catalog/templates/registry/coder-labs/docker-build",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/templates/docker-build",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder-labs",
+      "name": "externally-managed-workspace",
+      "path": "catalog/templates/registry/coder-labs/externally-managed-workspace",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/templates/externally-managed-workspace",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder-labs",
+      "name": "kiro-crew",
+      "path": "catalog/templates/registry/coder-labs/kiro-crew",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/templates/kiro-crew",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "kiro-crew-prereqs.sh",
+        "main.tf",
+        "startup.sh"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder-labs",
+      "name": "kubernetes-agent-sandbox",
+      "path": "catalog/templates/registry/coder-labs/kubernetes-agent-sandbox",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/templates/kubernetes-agent-sandbox",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder-labs",
+      "name": "kubernetes-openshell",
+      "path": "catalog/templates/registry/coder-labs/kubernetes-openshell",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/templates/kubernetes-openshell",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "launcher.sh",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder-labs",
+      "name": "kubernetes-sandboxed",
+      "path": "catalog/templates/registry/coder-labs/kubernetes-sandboxed",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/templates/kubernetes-sandboxed",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf",
+        "squid.conf.tftpl",
+        "start-agent.sh"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "ericpaulsen",
+      "name": "k8s-username",
+      "path": "catalog/templates/registry/ericpaulsen/k8s-username",
+      "source": "https://github.com/coder/registry/tree/main/registry/ericpaulsen/templates/k8s-username",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "ericpaulsen",
+      "name": "nfs-deployment",
+      "path": "catalog/templates/registry/ericpaulsen/nfs-deployment",
+      "source": "https://github.com/coder/registry/tree/main/registry/ericpaulsen/templates/nfs-deployment",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "excellencedev",
+      "name": "hetzner-linux",
+      "path": "catalog/templates/registry/excellencedev/hetzner-linux",
+      "source": "https://github.com/coder/registry/tree/main/registry/excellencedev/templates/hetzner-linux",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "cloud-config.yaml.tftpl",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "iamtaochen",
+      "name": "ssh-linux",
+      "path": "catalog/templates/registry/iamtaochen/ssh-linux",
+      "source": "https://github.com/coder/registry/tree/main/registry/iamtaochen/templates/ssh-linux",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "joergklein",
+      "name": "docker-texlive",
+      "path": "catalog/templates/registry/joergklein/docker-texlive",
+      "source": "https://github.com/coder/registry/tree/main/registry/joergklein/templates/docker-texlive",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "matifali",
+      "name": "omnigent-docker",
+      "path": "catalog/templates/registry/matifali/omnigent-docker",
+      "source": "https://github.com/coder/registry/tree/main/registry/matifali/templates/omnigent-docker",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "mossylion",
+      "name": "scaleway-instance",
+      "path": "catalog/templates/registry/mossylion/scaleway-instance",
+      "source": "https://github.com/coder/registry/tree/main/registry/mossylion/templates/scaleway-instance",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf",
+        "scaleway-config.json"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "sharkymark",
+      "name": "docker-claude",
+      "path": "catalog/templates/registry/sharkymark/docker-claude",
+      "source": "https://github.com/coder/registry/tree/main/registry/sharkymark/templates/docker-claude",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "umair",
+      "name": "linode-vm",
+      "path": "catalog/templates/registry/umair/linode-vm",
+      "source": "https://github.com/coder/registry/tree/main/registry/umair/templates/linode-vm",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "umair",
+      "name": "proxmox-vm",
+      "path": "catalog/templates/registry/umair/proxmox-vm",
+      "source": "https://github.com/coder/registry/tree/main/registry/umair/templates/proxmox-vm",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    }
+  ],
+  "modules": [
+    {
+      "kind": "module",
+      "namespace": "AJ0070",
+      "name": "pgadmin",
+      "path": "catalog/modules/registry/AJ0070/pgadmin",
+      "source": "https://github.com/coder/registry/tree/main/registry/AJ0070/modules/pgadmin",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "run.sh"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "BenraouaneSoufiane",
+      "name": "rustdesk",
+      "path": "catalog/modules/registry/BenraouaneSoufiane/rustdesk",
+      "source": "https://github.com/coder/registry/tree/main/registry/BenraouaneSoufiane/modules/rustdesk",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf",
+        "run.sh"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "anomaly",
+      "name": "tmux",
+      "path": "catalog/modules/registry/anomaly/tmux",
+      "source": "https://github.com/coder/registry/tree/main/registry/anomaly/modules/tmux",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "attractivetoad",
+      "name": "python",
+      "path": "catalog/modules/registry/attractivetoad/python",
+      "source": "https://github.com/coder/registry/tree/main/registry/attractivetoad/modules/python",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "bpmct",
+      "name": "onepassword",
+      "path": "catalog/modules/registry/bpmct/onepassword",
+      "source": "https://github.com/coder/registry/tree/main/registry/bpmct/modules/onepassword",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf",
+        "run.sh"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "agent-firewall",
+      "path": "catalog/modules/registry/coder/agent-firewall",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/agent-firewall",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "agent-firewall.tftest.hcl",
+        "config.yaml.tftpl",
+        "main.test.ts",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "agent-relay-claude-code",
+      "path": "catalog/modules/registry/coder/agent-relay-claude-code",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/agent-relay-claude-code",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "cleanup.sh.tftpl",
+        "install.sh.tftpl",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl",
+        "session_attached.sh.tftpl",
+        "start.sh.tftpl",
+        "status.sh.tftpl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "agent-relay-cursor",
+      "path": "catalog/modules/registry/coder/agent-relay-cursor",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/agent-relay-cursor",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "cleanup.sh.tftpl",
+        "install.sh.tftpl",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl",
+        "session_attached.sh.tftpl",
+        "start.sh.tftpl",
+        "status.sh.tftpl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "agentapi",
+      "path": "catalog/modules/registry/coder/agentapi",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/agentapi",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "agentapi.tftest.hcl",
+        "main.test.ts",
+        "main.tf",
+        "test-util.ts"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "aibridge-proxy",
+      "path": "catalog/modules/registry/coder/aibridge-proxy",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/aibridge-proxy",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "aider",
+      "path": "catalog/modules/registry/coder/aider",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/aider",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "amazon-dcv-windows",
+      "path": "catalog/modules/registry/coder/amazon-dcv-windows",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/amazon-dcv-windows",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "amazon-dcv-windows.tftest.hcl",
+        "install-dcv.ps1",
+        "main.test.ts",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "antigravity",
+      "path": "catalog/modules/registry/coder/antigravity",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/antigravity",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "aws-ec2-instance-type",
+      "path": "catalog/modules/registry/coder/aws-ec2-instance-type",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/aws-ec2-instance-type",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "instance-types.json",
+        "main.tf",
+        "main.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "aws-region",
+      "path": "catalog/modules/registry/coder/aws-region",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/aws-region",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf",
+        "main.tftest.hcl",
+        "regions.json"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "azure-region",
+      "path": "catalog/modules/registry/coder/azure-region",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/azure-region",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "claude-code",
+      "path": "catalog/modules/registry/coder/claude-code",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/claude-code",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "code-server",
+      "path": "catalog/modules/registry/coder/code-server",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/code-server",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "code-server.tftest.hcl",
+        "main.test.ts",
+        "main.tf",
+        "run.sh"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "coder-login",
+      "path": "catalog/modules/registry/coder/coder-login",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/coder-login",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "coder-utils",
+      "path": "catalog/modules/registry/coder/coder-utils",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/coder-utils",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "cursor",
+      "path": "catalog/modules/registry/coder/cursor",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/cursor",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "devcontainers-cli",
+      "path": "catalog/modules/registry/coder/devcontainers-cli",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/devcontainers-cli",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl",
+        "test-util.ts"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "devin-desktop",
+      "path": "catalog/modules/registry/coder/devin-desktop",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/devin-desktop",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "dotfiles",
+      "path": "catalog/modules/registry/coder/dotfiles",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/dotfiles",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "run.sh"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "filebrowser",
+      "path": "catalog/modules/registry/coder/filebrowser",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/filebrowser",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "run.sh"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "gcp-region",
+      "path": "catalog/modules/registry/coder/gcp-region",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/gcp-region",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "git-clone",
+      "path": "catalog/modules/registry/coder/git-clone",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/git-clone",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "git-clone.tftest.hcl",
+        "main.test.ts",
+        "main.tf",
+        "run.sh"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "git-commit-signing",
+      "path": "catalog/modules/registry/coder/git-commit-signing",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/git-commit-signing",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf",
+        "run.sh"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "git-config",
+      "path": "catalog/modules/registry/coder/git-config",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/git-config",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "github-upload-public-key",
+      "path": "catalog/modules/registry/coder/github-upload-public-key",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/github-upload-public-key",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl",
+        "run.sh"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "goose",
+      "path": "catalog/modules/registry/coder/goose",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/goose",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "jetbrains",
+      "path": "catalog/modules/registry/coder/jetbrains",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/jetbrains",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "jetbrains.tftest.hcl",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "jetbrains-gateway",
+      "path": "catalog/modules/registry/coder/jetbrains-gateway",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/jetbrains-gateway",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "jfrog-oauth",
+      "path": "catalog/modules/registry/coder/jfrog-oauth",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/jfrog-oauth",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        ".npmrc.tftpl",
+        "README.md",
+        "conda.conf.tftpl",
+        "jfrog-oauth.tftest.hcl",
+        "main.tf",
+        "pip.conf.tftpl",
+        "run.sh",
+        "settings.xml.tftpl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "jfrog-token",
+      "path": "catalog/modules/registry/coder/jfrog-token",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/jfrog-token",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        ".npmrc.tftpl",
+        "README.md",
+        "conda.conf.tftpl",
+        "jfrog-token.tftest.hcl",
+        "main.test.ts",
+        "main.tf",
+        "pip.conf.tftpl",
+        "run.sh",
+        "settings.xml.tftpl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "jfrog-xray",
+      "path": "catalog/modules/registry/coder/jfrog-xray",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/jfrog-xray",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "jupyter-notebook",
+      "path": "catalog/modules/registry/coder/jupyter-notebook",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/jupyter-notebook",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl",
+        "run.sh"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "jupyterlab",
+      "path": "catalog/modules/registry/coder/jupyterlab",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/jupyterlab",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl",
+        "run.sh"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "kasmvnc",
+      "path": "catalog/modules/registry/coder/kasmvnc",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/kasmvnc",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "path_vnc.html",
+        "run.sh"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "kiro",
+      "path": "catalog/modules/registry/coder/kiro",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/kiro",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "kiro.tftest.hcl",
+        "main.test.ts",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "local-windows-rdp",
+      "path": "catalog/modules/registry/coder/local-windows-rdp",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/local-windows-rdp",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "configure-rdp.ps1",
+        "local-windows-rdp.tftest.hcl",
+        "main.test.ts",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "personalize",
+      "path": "catalog/modules/registry/coder/personalize",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/personalize",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl",
+        "run.sh"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "portabledesktop",
+      "path": "catalog/modules/registry/coder/portabledesktop",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/portabledesktop",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "portabledesktop.tftest.hcl",
+        "run.sh"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "rstudio-server",
+      "path": "catalog/modules/registry/coder/rstudio-server",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/rstudio-server",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf",
+        "run.sh"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "slackme",
+      "path": "catalog/modules/registry/coder/slackme",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/slackme",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "slackme.sh"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "supabase",
+      "path": "catalog/modules/registry/coder/supabase",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/supabase",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "vault-cli",
+      "path": "catalog/modules/registry/coder/vault-cli",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/vault-cli",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf",
+        "main.tftest.hcl",
+        "run.sh"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "vault-github",
+      "path": "catalog/modules/registry/coder/vault-github",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/vault-github",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "run.sh"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "vault-jwt",
+      "path": "catalog/modules/registry/coder/vault-jwt",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/vault-jwt",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "run.sh"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "vault-token",
+      "path": "catalog/modules/registry/coder/vault-token",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/vault-token",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "run.sh"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "vscode-desktop",
+      "path": "catalog/modules/registry/coder/vscode-desktop",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/vscode-desktop",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "vscode-desktop-core",
+      "path": "catalog/modules/registry/coder/vscode-desktop-core",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/vscode-desktop-core",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "vscode-web",
+      "path": "catalog/modules/registry/coder/vscode-web",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/vscode-web",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "run.sh",
+        "vscode-web.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "windows-rdp",
+      "path": "catalog/modules/registry/coder/windows-rdp",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/windows-rdp",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "devolutions-patch.js",
+        "main.test.ts",
+        "main.tf",
+        "powershell-installation-script.tftpl",
+        "tsconfig.json",
+        "windows-rdp.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "windsurf",
+      "path": "catalog/modules/registry/coder/windsurf",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/windsurf",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "xum",
+      "path": "catalog/modules/registry/coder/xum",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/xum",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "run.sh",
+        "xum.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder",
+      "name": "zed",
+      "path": "catalog/modules/registry/coder/zed",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/zed",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "zed.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder-labs",
+      "name": "archive",
+      "path": "catalog/modules/registry/coder-labs/archive",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/archive",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "archive.tftest.hcl",
+        "main.test.ts",
+        "main.tf",
+        "run.sh"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder-labs",
+      "name": "auggie",
+      "path": "catalog/modules/registry/coder-labs/auggie",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/auggie",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder-labs",
+      "name": "codex",
+      "path": "catalog/modules/registry/coder-labs/codex",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/codex",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder-labs",
+      "name": "copilot",
+      "path": "catalog/modules/registry/coder-labs/copilot",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/copilot",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder-labs",
+      "name": "cursor-cli",
+      "path": "catalog/modules/registry/coder-labs/cursor-cli",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/cursor-cli",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder-labs",
+      "name": "kiro-crew",
+      "path": "catalog/modules/registry/coder-labs/kiro-crew",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/kiro-crew",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "kiro-crew.tftest.hcl",
+        "main.test.ts",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder-labs",
+      "name": "mcp-servers",
+      "path": "catalog/modules/registry/coder-labs/mcp-servers",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/mcp-servers",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "auth.test.ts",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder-labs",
+      "name": "nextflow",
+      "path": "catalog/modules/registry/coder-labs/nextflow",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/nextflow",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf",
+        "run.sh"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder-labs",
+      "name": "nix",
+      "path": "catalog/modules/registry/coder-labs/nix",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/nix",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "develop.tf",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl",
+        "nixos.tf"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder-labs",
+      "name": "open-webui",
+      "path": "catalog/modules/registry/coder-labs/open-webui",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/open-webui",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf",
+        "main.tftest.hcl",
+        "run.sh"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder-labs",
+      "name": "opencode",
+      "path": "catalog/modules/registry/coder-labs/opencode",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/opencode",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder-labs",
+      "name": "perplexica",
+      "path": "catalog/modules/registry/coder-labs/perplexica",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/perplexica",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf",
+        "perplexica.tftest.hcl",
+        "run.sh"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder-labs",
+      "name": "pi",
+      "path": "catalog/modules/registry/coder-labs/pi",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/pi",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder-labs",
+      "name": "pool",
+      "path": "catalog/modules/registry/coder-labs/pool",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/pool",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf",
+        "main.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder-labs",
+      "name": "sourcegraph-amp",
+      "path": "catalog/modules/registry/coder-labs/sourcegraph-amp",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/sourcegraph-amp",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder-labs",
+      "name": "ttyd",
+      "path": "catalog/modules/registry/coder-labs/ttyd",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/ttyd",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "run.sh"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "cytoshahar",
+      "name": "positron",
+      "path": "catalog/modules/registry/cytoshahar/positron",
+      "source": "https://github.com/coder/registry/tree/main/registry/cytoshahar/modules/positron",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "djarbz",
+      "name": "copyparty",
+      "path": "catalog/modules/registry/djarbz/copyparty",
+      "source": "https://github.com/coder/registry/tree/main/registry/djarbz/modules/copyparty",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "copyparty.tftest.hcl",
+        "main.tf",
+        "run.sh"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "droopy4096",
+      "name": "mise-install",
+      "path": "catalog/modules/registry/droopy4096/mise-install",
+      "source": "https://github.com/coder/registry/tree/main/registry/droopy4096/modules/mise-install",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf",
+        "mise-install.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "dy-ma",
+      "name": "tailscale",
+      "path": "catalog/modules/registry/dy-ma/tailscale",
+      "source": "https://github.com/coder/registry/tree/main/registry/dy-ma/modules/tailscale",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "install.sh",
+        "main.test.ts",
+        "main.tf",
+        "tailscale.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "edd88-pixel",
+      "name": "cloudcli",
+      "path": "catalog/modules/registry/edd88-pixel/cloudcli",
+      "source": "https://github.com/coder/registry/tree/main/registry/edd88-pixel/modules/cloudcli",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "edd88-pixel",
+      "name": "open-collaboration-tools",
+      "path": "catalog/modules/registry/edd88-pixel/open-collaboration-tools",
+      "source": "https://github.com/coder/registry/tree/main/registry/edd88-pixel/modules/open-collaboration-tools",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "open-collaboration-tools.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "gojnimer6553",
+      "name": "happy",
+      "path": "catalog/modules/registry/gojnimer6553/happy",
+      "source": "https://github.com/coder/registry/tree/main/registry/gojnimer6553/modules/happy",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "gojnimer6553",
+      "name": "herdr",
+      "path": "catalog/modules/registry/gojnimer6553/herdr",
+      "source": "https://github.com/coder/registry/tree/main/registry/gojnimer6553/modules/herdr",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "harleylrn",
+      "name": "kiro-cli",
+      "path": "catalog/modules/registry/harleylrn/kiro-cli",
+      "source": "https://github.com/coder/registry/tree/main/registry/harleylrn/modules/kiro-cli",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "harsh9485",
+      "name": "jetbrains-plugins",
+      "path": "catalog/modules/registry/harsh9485/jetbrains-plugins",
+      "source": "https://github.com/coder/registry/tree/main/registry/harsh9485/modules/jetbrains-plugins",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "jetbrains-plugins.tftest.hcl",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "kmjones1979",
+      "name": "oneclaw",
+      "path": "catalog/modules/registry/kmjones1979/oneclaw",
+      "source": "https://github.com/coder/registry/tree/main/registry/kmjones1979/modules/oneclaw",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "matifali",
+      "name": "omnigent",
+      "path": "catalog/modules/registry/matifali/omnigent",
+      "source": "https://github.com/coder/registry/tree/main/registry/matifali/modules/omnigent",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.tf",
+        "main.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "mavrickrishi",
+      "name": "auto-start-dev-server",
+      "path": "catalog/modules/registry/mavrickrishi/auto-start-dev-server",
+      "source": "https://github.com/coder/registry/tree/main/registry/mavrickrishi/modules/auto-start-dev-server",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "run.sh"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "mavrickrishi",
+      "name": "aws-ami-snapshot",
+      "path": "catalog/modules/registry/mavrickrishi/aws-ami-snapshot",
+      "source": "https://github.com/coder/registry/tree/main/registry/mavrickrishi/modules/aws-ami-snapshot",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "mavrickrishi",
+      "name": "nexus-repository",
+      "path": "catalog/modules/registry/mavrickrishi/nexus-repository",
+      "source": "https://github.com/coder/registry/tree/main/registry/mavrickrishi/modules/nexus-repository",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "run.sh"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "nataindata",
+      "name": "apache-airflow",
+      "path": "catalog/modules/registry/nataindata/apache-airflow",
+      "source": "https://github.com/coder/registry/tree/main/registry/nataindata/modules/apache-airflow",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "thezoker",
+      "name": "nodejs",
+      "path": "catalog/modules/registry/thezoker/nodejs",
+      "source": "https://github.com/coder/registry/tree/main/registry/thezoker/modules/nodejs",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "nodejs.tftest.hcl",
+        "run.sh"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "umair",
+      "name": "digitalocean-region",
+      "path": "catalog/modules/registry/umair/digitalocean-region",
+      "source": "https://github.com/coder/registry/tree/main/registry/umair/modules/digitalocean-region",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "whizus",
+      "name": "exoscale-instance-type",
+      "path": "catalog/modules/registry/whizus/exoscale-instance-type",
+      "source": "https://github.com/coder/registry/tree/main/registry/whizus/modules/exoscale-instance-type",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "whizus",
+      "name": "exoscale-zone",
+      "path": "catalog/modules/registry/whizus/exoscale-zone",
+      "source": "https://github.com/coder/registry/tree/main/registry/whizus/modules/exoscale-zone",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": null,
+      "description": "---",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,142 @@
+---
+display_name: Cursor CLI
+icon: ../../../../.icons/cursor.svg
+description: Install and configure the Cursor Agent CLI in your workspace.
+verified: true
+tags: [agent, cursor, ai]
+---
+
+# Cursor CLI
+
+Install and configure the [Cursor Agent CLI](https://cursor.com/docs/cli/overview) in your workspace.
+
+```tf
+module "cursor-cli" {
+  source   = "registry.coder.com/coder-labs/cursor-cli/coder"
+  version  = "1.0.0"
+  agent_id = coder_agent.main.id
+  api_key  = var.cursor_api_key
+}
+```
+
+> [!WARNING]
+> If upgrading from v0.x.x of this module: v1 is a major refactor that drops support for Coder Tasks and AgentAPI. The module now only installs and configures Cursor CLI; launch it with your own `coder_app`. `folder` is renamed to `workdir` and is optional. `model`, `force`, and `ai_prompt` are removed in favor of CLI flags in your launcher. MCP servers are now written to the user-level `~/.cursor/mcp.json` instead of `<folder>/.cursor/mcp.json`. Keep using v0.x.x if you depend on Coder Tasks.
+
+## Examples
+
+### Standalone mode with a launcher app
+
+```tf
+locals {
+  cursor_workdir = "/home/coder/project"
+}
+
+module "cursor-cli" {
+  source   = "registry.coder.com/coder-labs/cursor-cli/coder"
+  version  = "1.0.0"
+  agent_id = coder_agent.main.id
+  workdir  = local.cursor_workdir
+  api_key  = var.cursor_api_key
+}
+
+resource "coder_app" "cursor_cli" {
+  agent_id     = coder_agent.main.id
+  slug         = "cursor-cli"
+  display_name = "Cursor CLI"
+  icon         = "/icon/cursor.svg"
+  open_in      = "slim-window"
+  command      = <<-EOT
+    #!/usr/bin/env bash
+    set -e
+    cd "${local.cursor_workdir}"
+    exec cursor-agent --model gpt-5 --force
+  EOT
+}
+```
+
+When `workdir` is set, the module creates it if missing and marks it as a trusted workspace.
+
+### MCP servers and rules
+
+```tf
+module "cursor-cli" {
+  source   = "registry.coder.com/coder-labs/cursor-cli/coder"
+  version  = "1.0.0"
+  agent_id = coder_agent.main.id
+  workdir  = "/home/coder/project"
+  api_key  = var.cursor_api_key
+
+  mcp = <<-EOF
+  {
+    "mcpServers": {
+      "playwright": {
+        "command": "npx",
+        "args": ["-y", "@playwright/mcp@latest", "--headless", "--isolated", "--no-sandbox"]
+      }
+    }
+  }
+  EOF
+
+  rules_files = {
+    "python.mdc" = <<-EOT
+      ---
+      description: Python conventions
+      alwaysApply: true
+      ---
+
+      - Use type hints on public functions.
+    EOT
+  }
+}
+```
+
+`mcp` uses the [`mcp.json`](https://cursor.com/docs/cli/mcp) format and is merged into `~/.cursor/mcp.json`. `rules_files` are written to `<workdir>/.cursor/rules/` and require `workdir`.
+
+### Serialize a downstream `coder_script` after the install pipeline
+
+The module exposes the `scripts` output: an ordered list of `coder exp sync` names for the scripts this module creates (pre_install, install, post_install). Scripts that were not configured are absent.
+
+```tf
+module "cursor-cli" {
+  source   = "registry.coder.com/coder-labs/cursor-cli/coder"
+  version  = "1.0.0"
+  agent_id = coder_agent.main.id
+}
+
+resource "coder_script" "post_cursor_cli" {
+  agent_id     = coder_agent.main.id
+  display_name = "Run after Cursor CLI install"
+  run_on_start = true
+  script       = <<-EOT
+    #!/usr/bin/env bash
+    set -euo pipefail
+    trap 'coder exp sync complete post-cursor-cli' EXIT
+    coder exp sync want post-cursor-cli ${join(" ", module.cursor-cli.scripts)}
+    coder exp sync start post-cursor-cli
+
+    cursor-agent --version
+  EOT
+}
+```
+
+## Configuration
+
+Set `api_key` (exported as `CURSOR_API_KEY`) or run `cursor-agent login` in the workspace. See [Cursor CLI authentication](https://cursor.com/docs/cli/reference/authentication).
+
+`cursor_config_dir` is exported as `CURSOR_CONFIG_DIR`. See [Cursor CLI configuration](https://cursor.com/docs/cli/reference/configuration).
+
+## Troubleshooting
+
+Check the log files in `~/.coder-modules/coder-labs/cursor-cli/logs/` for detailed information.
+
+```bash
+cat ~/.coder-modules/coder-labs/cursor-cli/logs/install.log
+cat ~/.coder-modules/coder-labs/cursor-cli/logs/pre_install.log
+cat ~/.coder-modules/coder-labs/cursor-cli/logs/post_install.log
+```
+
+## References
+
+- [Cursor CLI documentation](https://cursor.com/docs/cli/overview)
+- [Cursor CLI MCP](https://cursor.com/docs/cli/mcp)
+- [Cursor rules](https://cursor.com/docs/context/rules)

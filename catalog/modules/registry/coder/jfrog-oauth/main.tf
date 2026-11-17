@@ -1,0 +1,256 @@
+terraform {
+  required_version = ">= 1.0"
+
+  required_providers {
+    coder = {
+      source  = "coder/coder"
+      version = ">= 0.23"
+    }
+  }
+}
+
+variable "jfrog_url" {
+  type        = string
+  description = "JFrog instance URL. e.g. https://myartifactory.jfrog.io"
+  # ensue the URL is HTTPS or HTTP
+  validation {
+    condition     = can(regex("^(https|http)://", var.jfrog_url))
+    error_message = "jfrog_url must be a valid URL starting with either 'https://' or 'http://'"
+  }
+}
+
+variable "jfrog_server_id" {
+  type        = string
+  description = "The server ID of the JFrog instance for JFrog CLI configuration"
+  default     = "0"
+}
+
+variable "username_field" {
+  type        = string
+  description = "The field to use for the artifactory username. i.e. Coder username or email."
+  default     = "username"
+  validation {
+    condition     = can(regex("^(email|username)$", var.username_field))
+    error_message = "username_field must be either 'email' or 'username'"
+  }
+}
+
+variable "external_auth_id" {
+  type        = string
+  description = "JFrog external auth ID. Default: 'jfrog'"
+  default     = "jfrog"
+}
+
+variable "agent_id" {
+  type        = string
+  description = "The ID of a Coder agent."
+}
+
+variable "configure_code_server" {
+  type        = bool
+  description = "Set to true to configure code-server to use JFrog."
+  default     = false
+}
+
+variable "install_jfrog_cli" {
+  description = "Whether to install the JFrog CLI when it is not already available on PATH."
+  type        = bool
+  default     = true
+}
+
+variable "configure_jfrog_cli" {
+  description = "Whether to authenticate the JFrog CLI and configure shell completion."
+  type        = bool
+  default     = true
+}
+
+variable "package_managers" {
+  type = object({
+    npm    = optional(list(string), [])
+    pnpm   = optional(list(string), [])
+    go     = optional(list(string), [])
+    pypi   = optional(list(string), [])
+    docker = optional(list(string), [])
+    conda  = optional(list(string), [])
+    maven  = optional(list(string), [])
+  })
+  description = <<-EOF
+    A map of package manager names to their respective artifactory repositories. Unused package managers can be omitted.
+    For example:
+      {
+        npm    = ["GLOBAL_NPM_REPO_KEY", "@SCOPED:NPM_REPO_KEY"]
+        pnpm   = ["GLOBAL_NPM_REPO_KEY", "@SCOPED:NPM_REPO_KEY"]
+        go     = ["YOUR_GO_REPO_KEY", "ANOTHER_GO_REPO_KEY"]
+        pypi   = ["YOUR_PYPI_REPO_KEY", "ANOTHER_PYPI_REPO_KEY"]
+        docker = ["YOUR_DOCKER_REPO_KEY", "ANOTHER_DOCKER_REPO_KEY"]
+        conda  = ["YOUR_CONDA_REPO_KEY", "ANOTHER_CONDA_REPO_KEY"]
+        maven  = ["YOUR_MAVEN_REPO_KEY", "ANOTHER_MAVEN_REPO_KEY"]
+      }
+  EOF
+  default     = {}
+
+  validation {
+    condition = (
+      length(var.package_managers.npm) == 0 ||
+      length(var.package_managers.pnpm) == 0 ||
+      var.package_managers.npm == var.package_managers.pnpm
+    )
+    error_message = "package_managers.npm and package_managers.pnpm must use the same repository list when both are configured because npm and pnpm share ~/.npmrc."
+  }
+}
+
+locals {
+  jwt_parts   = try(split(".", data.coder_external_auth.jfrog.access_token), [])
+  jwt_payload = try(local.jwt_parts[1], "")
+  payload_padding = local.jwt_payload == "" ? "" : (
+    length(local.jwt_payload) % 4 == 0 ? "" :
+    length(local.jwt_payload) % 4 == 2 ? "==" :
+    length(local.jwt_payload) % 4 == 3 ? "=" :
+    ""
+  )
+
+  jwt_username = try(
+    regex(
+      "/users/([^/]+)",
+      jsondecode(base64decode("${local.jwt_payload}${local.payload_padding}"))["sub"]
+    )[0],
+    ""
+  )
+
+  username = coalesce(
+    local.jwt_username != "" ? local.jwt_username : null,
+    var.username_field == "email" ? data.coder_workspace_owner.me.email : data.coder_workspace_owner.me.name
+  )
+  jfrog_host = split("://", var.jfrog_url)[1]
+  has_package_managers = anytrue([
+    length(var.package_managers.npm) > 0,
+    length(var.package_managers.pnpm) > 0,
+    length(var.package_managers.go) > 0,
+    length(var.package_managers.pypi) > 0,
+    length(var.package_managers.docker) > 0,
+    length(var.package_managers.conda) > 0,
+    length(var.package_managers.maven) > 0,
+  ])
+  requires_jfrog_cli = var.configure_jfrog_cli || anytrue([
+    length(var.package_managers.npm) > 0,
+    length(var.package_managers.pnpm) > 0,
+    length(var.package_managers.go) > 0,
+    length(var.package_managers.pypi) > 0,
+    length(var.package_managers.maven) > 0,
+  ])
+  configure_workspace = var.install_jfrog_cli || var.configure_jfrog_cli || local.has_package_managers || var.configure_code_server
+  common_values = {
+    JFROG_URL                = var.jfrog_url
+    JFROG_HOST               = local.jfrog_host
+    JFROG_SERVER_ID          = var.jfrog_server_id
+    ARTIFACTORY_USERNAME     = local.username
+    ARTIFACTORY_EMAIL        = data.coder_workspace_owner.me.email
+    ARTIFACTORY_ACCESS_TOKEN = data.coder_external_auth.jfrog.access_token
+  }
+  npm_repositories = length(var.package_managers.npm) > 0 ? var.package_managers.npm : var.package_managers.pnpm
+  npmrc = templatefile(
+    "${path.module}/.npmrc.tftpl",
+    merge(
+      local.common_values,
+      {
+        REPOS = [
+          for r in local.npm_repositories :
+          strcontains(r, ":") ? zipmap(["SCOPE", "NAME"], ["${split(":", r)[0]}:", split(":", r)[1]]) : { SCOPE = "", NAME = r }
+        ]
+      }
+    )
+  )
+  pip_conf = templatefile(
+    "${path.module}/pip.conf.tftpl", merge(local.common_values, { REPOS = var.package_managers.pypi })
+  )
+  conda_conf = templatefile(
+    "${path.module}/conda.conf.tftpl", merge(local.common_values, { REPOS = var.package_managers.conda })
+  )
+  maven_settings = templatefile(
+    "${path.module}/settings.xml.tftpl", merge(local.common_values, { REPOS = var.package_managers.maven })
+  )
+}
+
+data "coder_workspace" "me" {}
+data "coder_workspace_owner" "me" {}
+
+data "coder_external_auth" "jfrog" {
+  id = var.external_auth_id
+}
+
+resource "coder_script" "jfrog" {
+  count        = local.configure_workspace ? 1 : 0
+  agent_id     = var.agent_id
+  display_name = "jfrog"
+  icon         = "/icon/jfrog.svg"
+  script = templatefile("${path.module}/run.sh", merge(
+    local.common_values,
+    {
+      INSTALL_CLI           = var.install_jfrog_cli
+      CONFIGURE_CLI         = var.configure_jfrog_cli
+      REQUIRE_CLI           = local.requires_jfrog_cli
+      CONFIGURE_CODE_SERVER = var.configure_code_server
+      HAS_NPM               = length(var.package_managers.npm) == 0 ? "" : "YES"
+      HAS_PNPM              = length(var.package_managers.pnpm) == 0 ? "" : "YES"
+      NPMRC                 = local.npmrc
+      REPOSITORY_NPM        = try(element(var.package_managers.npm, 0), "")
+      REPOSITORY_PNPM       = try(element(var.package_managers.pnpm, 0), "")
+      HAS_GO                = length(var.package_managers.go) == 0 ? "" : "YES"
+      REPOSITORY_GO         = try(element(var.package_managers.go, 0), "")
+      HAS_PYPI              = length(var.package_managers.pypi) == 0 ? "" : "YES"
+      PIP_CONF              = local.pip_conf
+      REPOSITORY_PYPI       = try(element(var.package_managers.pypi, 0), "")
+      HAS_DOCKER            = length(var.package_managers.docker) == 0 ? "" : "YES"
+      REGISTER_DOCKER       = join("\n", formatlist("register_docker \"%s\"", var.package_managers.docker))
+      HAS_CONDA             = length(var.package_managers.conda) == 0 ? "" : "YES"
+      CONDA_CONF            = local.conda_conf
+      REPOSITORY_CONDA      = try(element(var.package_managers.conda, 0), "")
+      HAS_MAVEN             = length(var.package_managers.maven) == 0 ? "" : "YES"
+      MAVEN_SETTINGS        = local.maven_settings
+      REPOSITORY_MAVEN      = try(element(var.package_managers.maven, 0), "")
+    }
+  ))
+  run_on_start = true
+}
+
+resource "coder_env" "jfrog_ide_url" {
+  count    = var.configure_code_server ? 1 : 0
+  agent_id = var.agent_id
+  name     = "JFROG_IDE_URL"
+  value    = var.jfrog_url
+}
+
+resource "coder_env" "jfrog_ide_access_token" {
+  count    = var.configure_code_server ? 1 : 0
+  agent_id = var.agent_id
+  name     = "JFROG_IDE_ACCESS_TOKEN"
+  value    = data.coder_external_auth.jfrog.access_token
+}
+
+resource "coder_env" "jfrog_ide_store_connection" {
+  count    = var.configure_code_server ? 1 : 0
+  agent_id = var.agent_id
+  name     = "JFROG_IDE_STORE_CONNECTION"
+  value    = true
+}
+
+resource "coder_env" "goproxy" {
+  count    = length(var.package_managers.go) > 0 ? 1 : 0
+  agent_id = var.agent_id
+  name     = "GOPROXY"
+  value = join(",", [
+    for repo in var.package_managers.go :
+    "https://${local.username}:${data.coder_external_auth.jfrog.access_token}@${local.jfrog_host}/artifactory/api/go/${repo}"
+  ])
+}
+
+output "access_token" {
+  description = "value of the JFrog access token"
+  value       = data.coder_external_auth.jfrog.access_token
+  sensitive   = true
+}
+
+output "username" {
+  description = "value of the JFrog username"
+  value       = local.username
+}

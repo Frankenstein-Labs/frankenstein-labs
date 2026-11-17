@@ -1,0 +1,305 @@
+import { serve } from "bun";
+import { describe, expect, it } from "bun:test";
+import {
+  createJSONResponse,
+  findResourceInstance,
+  runTerraformInit,
+  runTerraformApply,
+  testRequiredVariables,
+} from "~test";
+
+describe("jfrog-token", async () => {
+  type TestVariables = {
+    agent_id: string;
+    jfrog_url: string;
+    artifactory_access_token: string;
+    package_managers?: string;
+
+    token_description?: string;
+    check_license?: boolean;
+    refreshable?: boolean;
+    expires_in?: number;
+    username_field?: string;
+    username?: string;
+    jfrog_server_id?: string;
+    configure_code_server?: boolean;
+    install_jfrog_cli?: boolean;
+    configure_jfrog_cli?: boolean;
+  };
+
+  await runTerraformInit(import.meta.dir);
+
+  // Run a fake JFrog server so the provider can initialize
+  // correctly. This saves us from having to make remote requests!
+  const fakeFrogHost = serve({
+    fetch: (req) => {
+      const url = new URL(req.url);
+      // See https://jfrog.com/help/r/jfrog-rest-apis/license-information
+      if (url.pathname === "/artifactory/api/system/license")
+        return createJSONResponse({
+          type: "Commercial",
+          licensedTo: "JFrog inc.",
+          validThrough: "May 15, 2036",
+        });
+      if (url.pathname === "/access/api/v1/tokens")
+        return createJSONResponse({
+          token_id: "xxx",
+          access_token: "xxx",
+          scopes: "any",
+        });
+      return createJSONResponse({});
+    },
+    port: 0,
+  });
+
+  const fakeFrogApi = `${fakeFrogHost.hostname}:${fakeFrogHost.port}/artifactory/api`;
+  const fakeFrogUrl = `http://${fakeFrogHost.hostname}:${fakeFrogHost.port}`;
+  const user = "default";
+  const token = "xxx";
+
+  testRequiredVariables<TestVariables>(import.meta.dir, {
+    agent_id: "some-agent-id",
+    jfrog_url: fakeFrogUrl,
+    artifactory_access_token: "XXXX",
+  });
+
+  it("generates an npmrc with scoped repos", async () => {
+    const state = await runTerraformApply<TestVariables>(import.meta.dir, {
+      agent_id: "some-agent-id",
+      jfrog_url: fakeFrogUrl,
+      artifactory_access_token: "XXXX",
+      package_managers: JSON.stringify({
+        npm: ["global", "@foo:foo", "@bar:bar"],
+      }),
+    });
+    const coderScript = findResourceInstance(state, "coder_script");
+    const npmrcStanza = `cat << EOF > ~/.npmrc
+email=${user}@example.com
+registry=http://${fakeFrogApi}/npm/global
+//${fakeFrogApi}/npm/global/:_authToken=xxx
+@foo:registry=http://${fakeFrogApi}/npm/foo
+//${fakeFrogApi}/npm/foo/:_authToken=xxx
+@bar:registry=http://${fakeFrogApi}/npm/bar
+//${fakeFrogApi}/npm/bar/:_authToken=xxx
+
+EOF`;
+    expect(coderScript.script).toContain(npmrcStanza);
+    expect(coderScript.script).toContain(
+      'jf npmc --global --repo-resolve "global"',
+    );
+    expect(coderScript.script).toContain(
+      'if [ -z "YES" ]; then\n  not_configured npm',
+    );
+  });
+
+  it("configures pnpm with npm-compatible repositories", async () => {
+    const state = await runTerraformApply<TestVariables>(import.meta.dir, {
+      agent_id: "some-agent-id",
+      jfrog_url: fakeFrogUrl,
+      artifactory_access_token: "XXXX",
+      install_jfrog_cli: false,
+      configure_jfrog_cli: false,
+      package_managers: JSON.stringify({
+        pnpm: ["global", "@foo:foo"],
+      }),
+    });
+    const coderScript = findResourceInstance(state, "coder_script");
+    expect(coderScript.script).toContain(
+      'jf pnpmc --global --repo-resolve "global"',
+    );
+    expect(coderScript.script).toContain(
+      `@foo:registry=http://${fakeFrogApi}/npm/foo`,
+    );
+    expect(coderScript.script).toContain(
+      'if [ -z "YES" ]; then\n  not_configured pnpm',
+    );
+    expect(coderScript.script).toContain(
+      'if [ "true" == "true" ] && ! command -v jf',
+    );
+  });
+
+  it("writes one npmrc when npm and pnpm are configured", async () => {
+    const state = await runTerraformApply<TestVariables>(import.meta.dir, {
+      agent_id: "some-agent-id",
+      jfrog_url: fakeFrogUrl,
+      artifactory_access_token: "XXXX",
+      package_managers: JSON.stringify({
+        npm: ["global", "@foo:foo"],
+        pnpm: ["global", "@foo:foo"],
+      }),
+    });
+    const coderScript = findResourceInstance(state, "coder_script");
+    expect(coderScript.script).toContain(
+      'jf npmc --global --repo-resolve "global"',
+    );
+    expect(coderScript.script).toContain(
+      'jf pnpmc --global --repo-resolve "global"',
+    );
+    expect(
+      coderScript.script.match(/cat << EOF > ~\/\.npmrc/g) ?? [],
+    ).toHaveLength(1);
+  });
+
+  it("generates a pip config with extra-indexes", async () => {
+    const state = await runTerraformApply<TestVariables>(import.meta.dir, {
+      agent_id: "some-agent-id",
+      jfrog_url: fakeFrogUrl,
+      artifactory_access_token: "XXXX",
+      package_managers: JSON.stringify({
+        pypi: ["global", "foo", "bar"],
+      }),
+    });
+    const coderScript = findResourceInstance(state, "coder_script");
+    const pipStanza = `cat << EOF > ~/.pip/pip.conf
+[global]
+index-url = https://${user}:${token}@${fakeFrogApi}/pypi/global/simple
+extra-index-url =
+    https://${user}:${token}@${fakeFrogApi}/pypi/foo/simple
+    https://${user}:${token}@${fakeFrogApi}/pypi/bar/simple
+
+EOF`;
+    expect(coderScript.script).toContain(pipStanza);
+    expect(coderScript.script).toContain(
+      'jf pipc --global --repo-resolve "global"',
+    );
+    expect(coderScript.script).toContain(
+      'if [ -z "YES" ]; then\n  not_configured pypi',
+    );
+  });
+
+  it("registers multiple docker repos", async () => {
+    const state = await runTerraformApply<TestVariables>(import.meta.dir, {
+      agent_id: "some-agent-id",
+      jfrog_url: fakeFrogUrl,
+      artifactory_access_token: "XXXX",
+      install_jfrog_cli: false,
+      configure_jfrog_cli: false,
+      package_managers: JSON.stringify({
+        docker: ["foo.jfrog.io", "bar.jfrog.io", "baz.jfrog.io"],
+      }),
+    });
+    const coderScript = findResourceInstance(state, "coder_script");
+    const dockerStanza = ["foo", "bar", "baz"]
+      .map((r) => `register_docker "${r}.jfrog.io"`)
+      .join("\n");
+    expect(coderScript.script).toContain(dockerStanza);
+    expect(coderScript.script).toContain(
+      'if [ -z "YES" ]; then\n  not_configured docker',
+    );
+    expect(coderScript.script).toContain(
+      'if [ "false" == "true" ] && ! command -v jf',
+    );
+  });
+
+  it("sets goproxy with multiple repos", async () => {
+    const state = await runTerraformApply<TestVariables>(import.meta.dir, {
+      agent_id: "some-agent-id",
+      jfrog_url: fakeFrogUrl,
+      artifactory_access_token: "XXXX",
+      package_managers: JSON.stringify({
+        go: ["foo", "bar", "baz"],
+      }),
+    });
+    const proxyEnv = findResourceInstance(state, "coder_env", "goproxy");
+    const proxies = ["foo", "bar", "baz"]
+      .map((r) => `https://${user}:${token}@${fakeFrogApi}/go/${r}`)
+      .join(",");
+    expect(proxyEnv.value).toEqual(proxies);
+
+    const coderScript = findResourceInstance(state, "coder_script");
+    expect(coderScript.script).toContain(
+      'jf goc --global --repo-resolve "foo"',
+    );
+    expect(coderScript.script).toContain(
+      'if [ -z "YES" ]; then\n  not_configured go',
+    );
+  });
+
+  it("generates a conda config with multiple repos", async () => {
+    const state = await runTerraformApply<TestVariables>(import.meta.dir, {
+      agent_id: "some-agent-id",
+      jfrog_url: fakeFrogUrl,
+      artifactory_access_token: "XXXX",
+      package_managers: JSON.stringify({
+        conda: ["conda-main", "conda-secondary", "conda-local"],
+      }),
+    });
+    const coderScript = findResourceInstance(state, "coder_script");
+    const condaStanza = `cat << EOF > ~/.condarc
+channels:
+  - https://${user}:${token}@${fakeFrogApi}/conda/conda-main
+  - https://${user}:${token}@${fakeFrogApi}/conda/conda-secondary
+  - https://${user}:${token}@${fakeFrogApi}/conda/conda-local
+  - defaults
+ssl_verify: true
+
+EOF`;
+    expect(coderScript.script).toContain(condaStanza);
+    expect(coderScript.script).toContain(
+      'if [ -z "YES" ]; then\n  not_configured conda',
+    );
+  });
+  it("generates a maven settings.xml with multiple repos", async () => {
+    const state = await runTerraformApply<TestVariables>(import.meta.dir, {
+      agent_id: "some-agent-id",
+      jfrog_url: fakeFrogUrl,
+      artifactory_access_token: "XXXX",
+      package_managers: JSON.stringify({
+        maven: ["central", "snapshots", "local"],
+      }),
+    });
+
+    const coderScript = findResourceInstance(state, "coder_script");
+
+    expect(coderScript.script).toContain("jf mvnc --global");
+    expect(coderScript.script).toContain('--server-id-resolve="0"');
+    expect(coderScript.script).toContain('--repo-resolve-releases "central"');
+    expect(coderScript.script).toContain('--repo-resolve-snapshots "central"');
+    expect(coderScript.script).toContain('--server-id-deploy="0"');
+    expect(coderScript.script).toContain('--repo-deploy-releases "central"');
+    expect(coderScript.script).toContain('--repo-deploy-snapshots "central"');
+
+    expect(coderScript.script).toContain("<servers>");
+    expect(coderScript.script).toContain("<id>central</id>");
+    expect(coderScript.script).toContain("<id>snapshots</id>");
+    expect(coderScript.script).toContain("<id>local</id>");
+
+    expect(coderScript.script).toContain(
+      `<url>${fakeFrogUrl}/artifactory/central</url>`,
+    );
+    expect(coderScript.script).toContain(
+      `<url>${fakeFrogUrl}/artifactory/snapshots</url>`,
+    );
+    expect(coderScript.script).toContain(
+      `<url>${fakeFrogUrl}/artifactory/local</url>`,
+    );
+
+    expect(coderScript.script).toContain(
+      'if [ -z "YES" ]; then\n  not_configured maven',
+    );
+  });
+
+  it("renders a clear error when a required preinstalled CLI is missing", async () => {
+    const state = await runTerraformApply<TestVariables>(import.meta.dir, {
+      agent_id: "some-agent-id",
+      jfrog_url: fakeFrogUrl,
+      artifactory_access_token: "XXXX",
+      install_jfrog_cli: false,
+      configure_jfrog_cli: true,
+    });
+    const coderScript = findResourceInstance(state, "coder_script");
+
+    expect(coderScript.script).toContain(
+      'if [ "true" == "true" ] && ! command -v jf',
+    );
+    expect(coderScript.script).toContain(
+      "JFrog CLI is required but was not found on PATH",
+    );
+    expect(coderScript.script).toContain(
+      "counter=0\n  while ! [ -x /tmp/code-server/bin/code-server ]; do",
+    );
+    expect(coderScript.script).not.toContain(
+      "while ! [ -x /tmp/code-server/bin/code-server ]; do\n    counter=0",
+    );
+  });
+});

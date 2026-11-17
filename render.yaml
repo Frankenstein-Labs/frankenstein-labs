@@ -1,0 +1,62 @@
+services:
+  - type: pserv
+    name: frankenstein-coder
+    runtime: image
+    image:
+      url: ghcr.io/coder/coder:latest
+    plan: standard
+    envVars:
+      - key: CODER_ACCESS_URL
+        sync: false
+      - key: CODER_PG_CONNECTION_URL
+        fromDatabase:
+          name: frankenstein-coder-db
+          property: connectionString
+      - key: CODER_HTTP_ADDRESS
+        value: 0.0.0.0:7080
+
+  - type: web
+    name: frankenstein-api
+    runtime: docker
+    dockerfilePath: ./services/api/Dockerfile
+    dockerContext: .
+    plan: starter
+    envVars:
+      - key: PORT
+        value: 3000
+      - key: CODER_ACCESS_URL
+        fromService:
+          type: pserv
+          name: frankenstein-coder
+          property: host
+      - key: CODER_SESSION_TOKEN
+        sync: false
+      - key: FRANKENSTEIN_API_SECRET
+        generateValue: true
+      - key: STORAGE_ENDPOINT
+        sync: false
+      - key: STORAGE_ACCESS_KEY
+        sync: false
+      - key: STORAGE_SECRET_KEY
+        sync: false
+      - key: CORTEX_API_URL
+        sync: false
+
+  - type: worker
+    name: frankenstein-catalog-worker
+    runtime: docker
+    dockerfilePath: ./services/api/Dockerfile
+    dockerContext: .
+    plan: starter
+    dockerCommand: node services/worker/worker.mjs
+    envVars:
+      - key: CODER_ACCESS_URL
+        sync: false
+      - key: CODER_SESSION_TOKEN
+        sync: false
+
+databases:
+  - name: frankenstein-coder-db
+    databaseName: coder
+    user: coder
+    plan: basic-256mb

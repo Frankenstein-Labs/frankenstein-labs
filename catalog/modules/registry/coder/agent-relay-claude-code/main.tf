@@ -1,0 +1,390 @@
+# Claude Code self-hosted runner module for Coder templates.
+#
+# A BYOC-compatible template includes this module and passes it the
+# workspace's coder_agent id. It declares every rich parameter
+# Agent Relay stamps on a build and runs `claude self-hosted-runner`
+# via a coder_script.
+#
+# Parameter contract (enforced by Agent Relay at startup via the dynamic
+# parameters evaluate endpoint):
+#
+#   - agent_relay_session_id, agent_relay_delivery_id, agent_relay_pool are
+#     persistent state: coderd only stores parameter values the
+#     template declares, and Agent Relay's dedupe and reconciliation query
+#     workspaces with `param:` search filters on them.
+#   - agent_relay_client_platform is persistent attribution: the surface
+#     that created the session. Stamped on every build; relays that
+#     predate it simply never set it.
+#   - agent_relay_claude_code_release_idle_session_min is a persistent
+#     runner input: minutes an attached session may sit without user input
+#     before the runner releases it. Its default is release_idle_session_min,
+#     so a relay that never stamps it gets the template's value.
+#   - agent_relay_claude_code_lock_to_account and agent_relay_attempt
+#     are ephemeral runner inputs, reset between builds. An ephemeral
+#     value is still recorded on the build that set it, which is how
+#     Agent Relay reads the attempt back when it reaps a dead workspace.
+#
+# The work-order JWT is not a parameter. Agent Relay sends it as an
+# ephemeral workspace secret, which the agent injects as
+# SELF_HOSTED_RUNNER_ENVIRONMENT_SECRET. It never reaches the
+# provisioner, Terraform state, or the build's parameters, so nothing
+# in this module can read it.
+#
+# The runner's lifecycle is published through the agent_relay_status agent
+# metadata item, whose script this module renders. The script starts the
+# runner detached and exits so the agent reaches the ready lifecycle
+# state rather than sitting in starting for the whole session.
+#
+# Scripts run through coder-utils, which orders the install step before
+# the start step and keeps a copy of each script and its output under
+# module_directory for debugging.
+
+terraform {
+  required_providers {
+    coder = {
+      source  = "coder/coder"
+      version = ">= 2.13"
+    }
+  }
+}
+
+variable "agent_id" {
+  type        = string
+  description = "ID of the coder_agent that should receive the runner env vars and run the runner script."
+}
+
+variable "cli_binary" {
+  type        = string
+  default     = "claude"
+  description = "Path to the Claude Code CLI binary in the workspace image. Override to test a beta build."
+
+  # Rendered into the start script and the supervisor as a command word,
+  # so it is restricted to a command name or path: no whitespace, quotes,
+  # or other shell metacharacters.
+  validation {
+    condition     = can(regex("^[A-Za-z0-9._/@+-]+$", var.cli_binary))
+    error_message = "cli_binary must be a command name or path made of letters, digits, and . _ / @ + - only."
+  }
+}
+
+variable "install_cli" {
+  type        = bool
+  default     = true
+  description = "Install the Claude Code CLI (curl https://claude.ai/install.sh -fsSL | bash) when the workspace starts and the CLI is not already on PATH. Defaults to true so a template works against an image that has no CLI. A CLI already in the image is used as is and never upgraded, which is the recommended and fastest path: the download only runs when the binary is missing, and it spends part of the claim-to-ready window when it does."
+}
+
+variable "state_file" {
+  type        = string
+  default     = "$HOME/.coder-modules/coder/agent-relay-claude-code/runner-state"
+  description = "Path the runner supervisor writes its lifecycle state to, read by the agent_relay_status agent metadata item."
+}
+
+variable "log_file" {
+  type        = string
+  default     = "$HOME/.coder-modules/coder/agent-relay-claude-code/logs/runner.log"
+  description = "Path the detached runner's output is written to."
+}
+
+variable "base_dir" {
+  type        = string
+  default     = "$HOME/workspace"
+  description = "Directory the runner checks sessions out under (the CLI's --base-dir). Created at start. The CLI's own default is /workspace, which a plain image does not have and the agent user cannot create."
+}
+
+variable "exit_if_unused_min" {
+  type        = number
+  default     = 10
+  description = "Minutes the runner waits for a session before exiting on its own (the CLI's --exit-if-unused-min). A dispatched workspace that never receives its session would otherwise report working forever and never be reaped. 0 disables the bound. Keep it above Agent Relay's dispatch deadline so a slow claim is not cut short."
+
+  validation {
+    condition     = var.exit_if_unused_min >= 0 && floor(var.exit_if_unused_min) == var.exit_if_unused_min
+    error_message = "exit_if_unused_min must be a whole number of minutes, 0 to disable."
+  }
+}
+
+variable "release_idle_session_min" {
+  description = "Default minutes an attached session may go without user input before the runner releases it (the CLI's --release-idle-session-min). The runner then exits and Agent Relay reaps the workspace; the session parks and resumes on a fresh runner on the user's next message. Agent Relay can override this per build through the agent_relay_claude_code_release_idle_session_min parameter. 0 never releases an idle session."
+  type        = number
+  default     = 60
+
+  validation {
+    condition     = var.release_idle_session_min >= 0 && var.release_idle_session_min <= 10080 && floor(var.release_idle_session_min) == var.release_idle_session_min
+    error_message = "release_idle_session_min must be a whole number of minutes from 0 to 10080, 0 to disable."
+  }
+}
+
+variable "health_port" {
+  description = "Port for the runner's /healthz and /metrics HTTP listener (the CLI's --health-port). session_attached_metadata_script reads it. The CLI binds every interface and has no bind-host option, so never publish this port. 0 disables the listener, and session_attached_metadata_script then reports disabled."
+  type        = number
+  default     = 3286
+
+  validation {
+    condition     = var.health_port >= 0 && var.health_port <= 65535 && floor(var.health_port) == var.health_port
+    error_message = "health_port must be a whole number from 0 to 65535, 0 to disable."
+  }
+}
+
+variable "serving_log_pattern" {
+  type        = string
+  default     = "Picked up session"
+  description = "Runner log substring that means a session was claimed. Only distinguishes the agent_relay_status values working and serving; a stale pattern degrades to working and affects nothing else."
+}
+
+variable "additional_args" {
+  description = "Additional arguments to pass to `claude self-hosted-runner`, one list element per argument, in order (e.g. `[\"--header\", \"a: 1\", \"--header\", \"b: 2\", \"--verbose\"]`). Each element is passed as written, so a flag can repeat and a value may contain spaces."
+  type        = list(string)
+  default     = []
+
+  validation {
+    condition     = alltrue([for a in var.additional_args : a != "" && !can(regex("\n", a))])
+    error_message = "additional_args elements must be non-empty and must not contain newlines."
+  }
+
+  # The module already sets these, from base_dir, exit_if_unused_min,
+  # release_idle_session_min, health_port, and the permissions wrapper. Keep
+  # this list in sync with the `self-hosted-runner` flags in start.sh.tftpl.
+  validation {
+    condition     = !anytrue([for a in var.additional_args : contains(["--capacity", "--base-dir", "--exit-if-unused-min", "--release-idle-session-min", "--health-port", "--exec-path"], split("=", a)[0])])
+    error_message = "additional_args must not set --capacity, --base-dir, --exit-if-unused-min, --release-idle-session-min, --health-port, or --exec-path; the module sets them (use base_dir, exit_if_unused_min, release_idle_session_min, and health_port instead)."
+  }
+}
+
+data "coder_parameter" "agent_relay_session_id" {
+  name         = "agent_relay_session_id"
+  display_name = "Agent Relay session"
+  description  = "Anthropic session this workspace serves. Agent Relay sets this when it dispatches the workspace; a human never fills it in. The relay uses it to recognize its own workspaces, dedupe redeliveries, and reconcile state after a restart."
+  type         = "string"
+  mutable      = true
+  default      = ""
+  order        = 1000
+  styling = jsonencode({
+    disabled    = true
+    placeholder = "Set by Agent Relay on dispatch"
+  })
+}
+
+data "coder_parameter" "agent_relay_delivery_id" {
+  name         = "agent_relay_delivery_id"
+  display_name = "Agent Relay delivery"
+  description  = "Work order that dispatched this build, identified by its JWT id. Agent Relay sets this when it dispatches the workspace; a human never fills it in. Tracing only: it rotates on every delivery attempt of the same session, so it identifies the delivery rather than the session."
+  type         = "string"
+  mutable      = true
+  default      = ""
+  order        = 1001
+  styling = jsonencode({
+    disabled    = true
+    placeholder = "Set by Agent Relay on dispatch"
+  })
+}
+
+data "coder_parameter" "agent_relay_pool" {
+  name         = "agent_relay_pool"
+  display_name = "Agent Relay pool"
+  description  = "Agent Relay runner pool that dispatched this build. Agent Relay sets this when it dispatches the workspace; a human never fills it in. One relay can serve several pools, each with its own Anthropic credential, organization, and template."
+  type         = "string"
+  mutable      = true
+  default      = ""
+  order        = 1002
+  styling = jsonencode({
+    disabled    = true
+    placeholder = "Set by Agent Relay on dispatch"
+  })
+}
+
+data "coder_parameter" "agent_relay_client_platform" {
+  name         = "agent_relay_client_platform"
+  display_name = "Claude Code client platform"
+  description  = "Surface the session was created from: web_claude_ai, desktop_app, ios, android, claude_code_cli, or claude_in_slack. Agent Relay sets this when it dispatches the workspace; a human never fills it in. Exposed to the workspace as AGENT_RELAY_CLIENT_PLATFORM so a template can vary its setup by origin."
+  type         = "string"
+  mutable      = true
+  default      = ""
+  order        = 1006
+  styling = jsonencode({
+    disabled    = true
+    placeholder = "Set by Agent Relay on dispatch"
+  })
+}
+
+data "coder_parameter" "agent_relay_claude_code_release_idle_session_min" {
+  name         = "agent_relay_claude_code_release_idle_session_min"
+  display_name = "Claude Code idle session release"
+  description  = "Minutes an attached session may go without user input before the runner releases it and exits, which tells the relay to delete the workspace. The session parks and resumes on a fresh runner on the user's next message. Agent Relay sets this from the pool configuration; a human never fills it in. 0 never releases an idle session."
+  type         = "number"
+  mutable      = true
+  default      = tostring(var.release_idle_session_min)
+  order        = 1007
+  styling = jsonencode({
+    disabled    = true
+    placeholder = "Set by Agent Relay on dispatch"
+  })
+
+  # The CLI's own bound.
+  validation {
+    min   = 0
+    max   = 10080
+    error = "Idle session release must be a whole number of minutes from 0 to 10080, 0 to disable."
+  }
+}
+
+data "coder_parameter" "agent_relay_claude_code_lock_to_account" {
+  name         = "agent_relay_claude_code_lock_to_account"
+  display_name = "Claude Code account lock"
+  description  = "Anthropic account the runner is locked to, so a session can only ever be served for the account it was issued for. Agent Relay sets this from the work order's account_id claim; a human never fills it in."
+  type         = "string"
+  ephemeral    = true
+  mutable      = true
+  default      = ""
+  order        = 1004
+  styling = jsonencode({
+    disabled    = true
+    placeholder = "Set by Agent Relay on dispatch"
+  })
+}
+
+data "coder_parameter" "agent_relay_attempt" {
+  name         = "agent_relay_attempt"
+  display_name = "Agent Relay delivery attempt"
+  description  = "Delivery attempt this build was dispatched on, counted by Anthropic. Agent Relay sets this when it dispatches the workspace; a human never fills it in. The relay echoes it back when it reports a session undeliverable, because Anthropic ignores a report that names an older attempt. Ephemeral, so a build the relay did not dispatch carries no attempt rather than a stale one."
+  type         = "string"
+  ephemeral    = true
+  mutable      = true
+  default      = ""
+  order        = 1005
+  styling = jsonencode({
+    disabled    = true
+    placeholder = "Set by Agent Relay on dispatch"
+  })
+}
+
+# Environment variable names are the claude CLI's contract, not
+# Agent Relay's; do not rename them here. The CLI also reads
+# SELF_HOSTED_RUNNER_ENVIRONMENT_SECRET, which the agent injects from
+# the workspace secret Agent Relay sends; a coder_env of the same name
+# would be overridden by it.
+resource "coder_env" "agent_relay_claude_code_lock_to_account" {
+  agent_id = var.agent_id
+  name     = "SELF_HOSTED_RUNNER_LOCK_TO_ACCOUNT"
+  value    = data.coder_parameter.agent_relay_claude_code_lock_to_account.value
+}
+
+# Agent Relay's own variable, not the CLI's: attribution for scripts and
+# tooling inside the workspace.
+resource "coder_env" "agent_relay_client_platform" {
+  agent_id = var.agent_id
+  name     = "AGENT_RELAY_CLIENT_PLATFORM"
+  value    = data.coder_parameter.agent_relay_client_platform.value
+}
+
+# Parameter values reach the runner through the environment, never through
+# the script text, so a stamped value is data and not code.
+resource "coder_env" "agent_relay_claude_code_release_idle_session_min" {
+  agent_id = var.agent_id
+  name     = "AGENT_RELAY_CLAUDE_CODE_RELEASE_IDLE_SESSION_MIN"
+  value    = data.coder_parameter.agent_relay_claude_code_release_idle_session_min.value
+}
+
+locals {
+  # coder-utils requires this exact layout. Scripts land in scripts/ and
+  # their output in logs/; the runner state and log default to the same
+  # tree so one directory holds everything a debugger needs.
+  module_directory = "$HOME/.coder-modules/coder/agent-relay-claude-code"
+
+  # The listener binds every interface; loopback is how the workspace's own
+  # scripts reach it.
+  health_url = var.health_port > 0 ? "http://127.0.0.1:${var.health_port}" : ""
+
+  cleanup_script = templatefile("${path.module}/cleanup.sh.tftpl", {
+    cleanup_mode     = "start"
+    module_directory = local.module_directory
+    state_file       = var.state_file
+  })
+
+  shutdown_script = templatefile("${path.module}/cleanup.sh.tftpl", {
+    cleanup_mode     = "stop"
+    module_directory = local.module_directory
+    state_file       = var.state_file
+  })
+
+  install_script = templatefile("${path.module}/install.sh.tftpl", {
+    cli_binary  = var.cli_binary
+    install_cli = var.install_cli
+  })
+
+  start_script = templatefile("${path.module}/start.sh.tftpl", {
+    cli_binary         = var.cli_binary
+    install_cli        = var.install_cli
+    module_directory   = local.module_directory
+    state_file         = var.state_file
+    log_file           = var.log_file
+    base_dir           = var.base_dir
+    exit_if_unused_min = var.exit_if_unused_min
+    health_port        = var.health_port
+    additional_args    = base64encode(join("\n", var.additional_args))
+    # Fallback only; the parameter's value arrives through coder_env.
+    release_idle_session_min = var.release_idle_session_min
+  })
+}
+
+module "coder_utils" {
+  source  = "registry.coder.com/coder/coder-utils/coder"
+  version = "0.0.1"
+
+  agent_id            = var.agent_id
+  module_directory    = local.module_directory
+  display_name_prefix = "Claude Code runner"
+  icon                = "/emojis/1f916.png"
+  pre_install_script  = local.cleanup_script
+  install_script      = local.install_script
+  start_script        = local.start_script
+}
+
+resource "coder_script" "shutdown" {
+  agent_id     = var.agent_id
+  display_name = "Claude Code runner: Stop Script"
+  icon         = "/emojis/1f916.png"
+  run_on_stop  = true
+  timeout      = 20
+  script       = local.shutdown_script
+}
+
+# The coder provider has no standalone agent-metadata resource: the
+# metadata block belongs to coder_agent, which the template owns. The
+# template must add the block below; this output renders its script so
+# the state file path stays in one place. See README.
+output "status_metadata_script" {
+  description = "Script body for the agent_relay_status agent metadata item the template must declare on its coder_agent."
+  value = templatefile("${path.module}/status.sh.tftpl", {
+    state_file          = var.state_file
+    log_file            = var.log_file
+    serving_log_pattern = base64encode(var.serving_log_pattern)
+  })
+}
+
+output "session_attached_metadata_script" {
+  description = "Script body for the agent_relay_session_attached agent metadata item. Prints attached, unattached, stopped, or disabled; see README. Fails when a running runner's listener cannot be read, so an unknown sample is an error."
+  value = templatefile("${path.module}/session_attached.sh.tftpl", {
+    cli_binary = var.cli_binary
+    state_file = var.state_file
+    health_url = local.health_url
+  })
+}
+
+output "health_url" {
+  description = "Loopback URL of the runner's /healthz and /metrics listener, or empty when health_port is 0."
+  value       = local.health_url
+}
+
+output "scripts" {
+  description = "Ordered list of coder exp sync names produced by this module, in run order. A template can `coder exp sync want <self> <these>` to run its own scripts after the runner is up."
+  value       = module.coder_utils.scripts
+}
+
+output "dispatched" {
+  description = "Whether Agent Relay created this workspace. Stays true on every later build of it, including one a person restarts; whether the current build has a work order is decided by the start script, not here."
+  value       = data.coder_parameter.agent_relay_delivery_id.value != ""
+}
+
+output "client_platform" {
+  description = "Surface the session was created from (web_claude_ai, claude_in_slack, ...), or empty when the relay predates the parameter or the workspace was created manually."
+  value       = data.coder_parameter.agent_relay_client_platform.value
+}
