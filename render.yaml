@@ -1,19 +1,42 @@
+# Render Blueprint for Frankenstein-Labs.
+#
+# Architecture (see docs/RENDER_DEPLOYMENT.md for the full runbook):
+#   - frankenstein-coder        private service running the official Coder control plane
+#   - frankenstein-coder-db     managed Postgres used by Coder (durable state)
+#   - frankenstein-api          public API: catalog + authenticated proxy to Coder
+#   - frankenstein-catalog-worker  background sync of the vendored catalog
+#
+# Workspace compute is external. Render private services cannot run privileged
+# Docker-in-Docker, so Coder must be pointed at an external compute backend
+# (Kubernetes via the coder/coder-k8s provisioner, or an external Docker host).
+# See the "Workspace compute" section of docs/RENDER_DEPLOYMENT.md.
+
 services:
   - type: pserv
     name: frankenstein-coder
     runtime: image
+    # Digest-pinned official Coder image. Keep in sync with ./Dockerfile and
+    # with the version vendored under vendor/coder.
     image:
-      url: ghcr.io/coder/coder:latest
+      url: ghcr.io/coder/coder:v2.39.4@sha256:2ce6b2ab5b78afe05da8b62184efc7950bb0e53a32dcefab4ef1c9b22c15631a
     plan: 2c-4g
+    # Render sends SIGTERM on deploy; give Coder time to drain connections.
+    maxShutdownDelaySeconds: 60
     envVars:
-      - key: CODER_ACCESS_URL
-        sync: false
+      - key: CODER_HTTP_ADDRESS
+        value: 0.0.0.0:7080
+      # Durable state lives in managed Postgres, never on ephemeral disk.
       - key: CODER_PG_CONNECTION_URL
         fromDatabase:
           name: frankenstein-coder-db
           property: connectionString
-      - key: CODER_HTTP_ADDRESS
-        value: 0.0.0.0:7080
+      # Coder must be told the URL at which agents can reach it. A private
+      # service has no public URL, so this is set manually once the Coder
+      # endpoint is reachable (reverse proxy, tunnel, or public web service).
+      - key: CODER_ACCESS_URL
+        sync: false
+      - key: CODER_TELEMETRY_ENABLE
+        value: "false"
 
   - type: web
     name: frankenstein-api
@@ -22,18 +45,26 @@ services:
     dockerContext: .
     plan: 0.5c-512mb
     healthCheckPath: /healthz
+    maxShutdownDelaySeconds: 30
     envVars:
       - key: PORT
         value: 3000
+      - key: NODE_ENV
+        value: production
+      - key: CATALOG_INDEX
+        value: /app/catalog/index.json
+      # Internal "host:port" of the private Coder service.
       - key: CODER_INTERNAL_URL
         fromService:
           type: pserv
           name: frankenstein-coder
           property: hostport
+      # Public URL of Coder (if one is configured); also used for documentation.
       - key: CODER_ACCESS_URL
         sync: false
       - key: CODER_SESSION_TOKEN
         sync: false
+      # Shared secret required by every /api/* request (x-frankenstein-api-secret).
       - key: FRANKENSTEIN_API_SECRET
         generateValue: true
       - key: STORAGE_ENDPOINT
@@ -51,10 +82,17 @@ services:
     dockerfilePath: ./services/worker/Dockerfile
     dockerContext: .
     plan: 0.5c-512mb
-    dockerCommand: node services/worker/worker.mjs
+    maxShutdownDelaySeconds: 30
     envVars:
-      - key: CODER_ACCESS_URL
-        sync: false
+      # The worker loops every WORKER_INTERVAL_SECONDS instead of exiting, so
+      # Render does not treat a successful run as a crash.
+      - key: WORKER_INTERVAL_SECONDS
+        value: "3600"
+      - key: CODER_INTERNAL_URL
+        fromService:
+          type: pserv
+          name: frankenstein-coder
+          property: hostport
       - key: CODER_SESSION_TOKEN
         sync: false
 

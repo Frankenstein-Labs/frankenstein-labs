@@ -1,40 +1,69 @@
+# Local development stack. Workspace compute is NOT part of this stack: Coder
+# here is only the control plane, and it is expected to be pointed at an
+# external compute backend (see docs/RENDER_DEPLOYMENT.md).
 services:
   postgres:
     image: postgres:16
+    restart: unless-stopped
     environment:
-      POSTGRES_USER: coder
-      POSTGRES_PASSWORD: change-me-local-only
-      POSTGRES_DB: coder
+      POSTGRES_USER: ${POSTGRES_USER:-coder}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me-local-only}
+      POSTGRES_DB: ${POSTGRES_DB:-coder}
     volumes:
       - coder-postgres:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U coder -d coder"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-coder} -d ${POSTGRES_DB:-coder}"]
       interval: 5s
       timeout: 5s
       retries: 20
+
   coder:
-    image: ghcr.io/coder/coder:latest
+    # Digest-pinned official image; keep in sync with render.yaml and ./Dockerfile.
+    image: ghcr.io/coder/coder:v2.39.4@sha256:2ce6b2ab5b78afe05da8b62184efc7950bb0e53a32dcefab4ef1c9b22c15631a
+    restart: unless-stopped
+    init: true
     depends_on:
       postgres:
         condition: service_healthy
     environment:
       CODER_ACCESS_URL: ${CODER_ACCESS_URL:-http://localhost:7080}
-      CODER_PG_CONNECTION_URL: postgresql://coder:change-me-local-only@postgres:5432/coder?sslmode=disable
+      CODER_PG_CONNECTION_URL: postgresql://${POSTGRES_USER:-coder}:${POSTGRES_PASSWORD:-change-me-local-only}@postgres:5432/${POSTGRES_DB:-coder}?sslmode=disable
       CODER_HTTP_ADDRESS: 0.0.0.0:7080
+      CODER_TELEMETRY_ENABLE: "false"
     ports:
       - "7080:7080"
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail --silent http://127.0.0.1:7080/healthz >/dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      start_period: 30s
+      retries: 6
+
   api:
     build:
       context: .
       dockerfile: services/api/Dockerfile
+    restart: unless-stopped
+    init: true
     depends_on:
-      - coder
+      coder:
+        condition: service_healthy
     environment:
       PORT: 3000
-      CODER_ACCESS_URL: http://coder:7080
+      NODE_ENV: production
+      CATALOG_INDEX: /app/catalog/index.json
+      CODER_INTERNAL_URL: http://coder:7080
+      CODER_ACCESS_URL: ${CODER_ACCESS_URL:-http://localhost:7080}
       CODER_SESSION_TOKEN: ${CODER_SESSION_TOKEN:?Set CODER_SESSION_TOKEN}
       FRANKENSTEIN_API_SECRET: ${FRANKENSTEIN_API_SECRET:?Set FRANKENSTEIN_API_SECRET}
     ports:
       - "3000:3000"
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://127.0.0.1:3000/healthz').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))\""]
+      interval: 10s
+      timeout: 5s
+      start_period: 10s
+      retries: 6
+
 volumes:
   coder-postgres:

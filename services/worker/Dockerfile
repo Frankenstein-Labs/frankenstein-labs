@@ -6,4 +6,8 @@ COPY services/worker/worker.mjs ./services/worker/worker.mjs
 COPY scripts ./scripts
 COPY catalog ./catalog
 ENV NODE_ENV=production
+# The worker clones the vendored upstream sources into /app/vendor at runtime,
+# so the unprivileged user must own the application tree.
+RUN chown -R node:node /app
+USER node
 CMD ["node", "services/worker/worker.mjs"]
