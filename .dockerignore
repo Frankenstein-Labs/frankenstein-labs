@@ -1,7 +1,13 @@
 .git
+.github
 .gitmodules
 .env
 .env.*
+!.env.example
 node_modules
 **/node_modules
-vendor/*/.git
+# vendor/ holds the upstream Coder and Registry sources used only for catalog
+# generation and local builds; no runtime image copies it.
+vendor
+docs
+tests

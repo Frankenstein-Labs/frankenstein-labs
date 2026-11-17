@@ -1,36 +1,147 @@
 import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
+
 const root = process.cwd();
+const SCHEMA_VERSION = 2;
+
 const commit = (dir) => execFileSync('git', ['-C', dir, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
-const text = (path) => existsSync(path) ? readFileSync(path, 'utf8') : '';
-const license = (value) => /agpl[- ]3/i.test(value) ? 'AGPL-3.0' : /apache[- ]2/i.test(value) ? 'Apache-2.0' : /mit license|\bMIT\b/i.test(value) ? 'MIT' : null;
-const description = (value) => value.split(/\n/).map((line) => line.trim()).find((line) => line && !line.startsWith('#') && !line.startsWith('['))?.slice(0, 240) ?? null;
-const collect = (rootPath, kind, sourceBase, sourceCommit) => {
+const text = (path) => (existsSync(path) ? readFileSync(path, 'utf8') : '');
+
+const licenseFromText = (value) => {
+  if (/gnu affero general public license/i.test(value)) return 'AGPL-3.0';
+  if (/apache license/i.test(value)) return 'Apache-2.0';
+  if (/mit license/i.test(value)) return 'MIT';
+  return null;
+};
+
+// Repository-level license: modules and templates inherit it unless they ship
+// their own LICENSE file. Attribution is never stripped (see LICENSES.md).
+const repoLicense = (dir) => licenseFromText(text(join(dir, 'LICENSE')));
+const dirLicense = (dir) => {
+  const own = readdirSync(dir).find((name) => /^LICENSE/i.test(name));
+  return own ? licenseFromText(text(join(dir, own))) : null;
+};
+
+// Coder README files use YAML front matter with a `description:` key. Fall back
+// to the first meaningful prose line, ignoring front matter and headings.
+const parseFrontMatter = (value) => {
+  const match = /^---\r?\n([\s\S]*?)\r?\n---/.exec(value);
+  if (!match) return {};
+  const fields = {};
+  for (const line of match[1].split(/\r?\n/)) {
+    const kv = /^([A-Za-z_]+):\s*(.*)$/.exec(line);
+    if (kv) fields[kv[1]] = kv[2].trim().replace(/^["']|["']$/g, '');
+  }
+  return fields;
+};
+
+const descriptionFrom = (readme) => {
+  const frontMatter = parseFrontMatter(readme);
+  if (frontMatter.description) return frontMatter.description.slice(0, 240);
+  const body = readme.replace(/^---[\s\S]*?---\r?\n/, '');
+  const line = body
+    .split(/\r?\n/)
+    .map((entry) => entry.trim())
+    .find((entry) => entry && !entry.startsWith('#') && !entry.startsWith('<!--') && !/^[-*=]{3,}$/.test(entry));
+  return line ? line.slice(0, 240) : null;
+};
+
+const isUnitDir = (dir) => existsSync(join(dir, 'main.tf'));
+
+const describeUnit = (dir, { kind, namespace, name, source, commit: sourceCommit, license }) => {
+  const readme = text(join(dir, 'README.md'));
+  return {
+    kind,
+    namespace,
+    name,
+    path: relative(root, dir),
+    source,
+    commit: sourceCommit,
+    license: dirLicense(dir) ?? license,
+    description: descriptionFrom(readme),
+    files: readdirSync(dir, { withFileTypes: true })
+      .filter((entry) => entry.isFile())
+      .map((entry) => entry.name)
+      .sort(),
+  };
+};
+
+// Walks a materialized catalog tree and records every directory that contains a
+// main.tf. Container directories (such as the experimental `x/` folder in
+// coder/coder) are traversed; their child path becomes part of the unit name.
+const collect = (rootPath, { kind, initialSegments = [], sourceFor, sourceCommit, license }) => {
   const output = [];
-  const walk = (dir, namespace = 'coder') => {
+  const walk = (dir, segments) => {
     if (!existsSync(dir)) return;
     for (const entry of readdirSync(dir, { withFileTypes: true })) {
       if (!entry.isDirectory() || entry.name.startsWith('.')) continue;
       const path = join(dir, entry.name);
-      const files = readdirSync(path, { withFileTypes: true });
-      const hasPayload = files.some((file) => file.isFile() && /\.(tf|tfvars|md|sh|yaml|yml|json|Dockerfile|ps1)$/i.test(file.name));
-      if (hasPayload) {
-        const readme = text(join(path, 'README.md'));
-        output.push({ kind, namespace, name: entry.name, path: relative(root, path), source: `${sourceBase}/${namespace}/${kind === 'template' ? 'templates' : 'modules'}/${entry.name}`, commit: sourceCommit, license: license(readme), description: description(readme), files: files.filter((file) => file.isFile()).map((file) => file.name) });
-      } else walk(path, entry.name);
+      const nextSegments = [...segments, entry.name];
+      if (isUnitDir(path)) {
+        const [namespace, ...rest] = nextSegments;
+        const name = rest.join('/');
+        output.push(describeUnit(path, {
+          kind,
+          namespace,
+          name,
+          source: sourceFor(namespace, name),
+          commit: sourceCommit,
+          license,
+        }));
+      } else {
+        walk(path, nextSegments);
+      }
     }
   };
-  walk(rootPath);
+  walk(rootPath, initialSegments);
   return output;
 };
+
 const coderCommit = commit(join(root, 'vendor/coder'));
 const registryCommit = commit(join(root, 'vendor/registry'));
+
 const templates = [
-  ...collect(join(root, 'catalog/templates/coder'), 'template', 'https://github.com/coder/coder/tree/main/examples/templates', coderCommit),
-  ...collect(join(root, 'catalog/templates/registry'), 'template', 'https://github.com/coder/registry/tree/main/registry', registryCommit)
+  ...collect(join(root, 'catalog/templates/coder'), {
+    kind: 'template',
+    initialSegments: ['coder'],
+    sourceFor: (namespace, name) =>
+      `https://github.com/coder/coder/tree/main/examples/templates/${name}`,
+    sourceCommit: coderCommit,
+    license: repoLicense(join(root, 'vendor/coder')),
+  }),
+  ...collect(join(root, 'catalog/templates/registry'), {
+    kind: 'template',
+    sourceFor: (namespace, name) =>
+      `https://github.com/coder/registry/tree/main/registry/${namespace}/templates/${name}`,
+    sourceCommit: registryCommit,
+    license: repoLicense(join(root, 'vendor/registry')),
+  }),
 ];
-const modules = collect(join(root, 'catalog/modules/registry'), 'module', 'https://github.com/coder/registry/tree/main/registry', registryCommit);
+
+const modules = collect(join(root, 'catalog/modules/registry'), {
+  kind: 'module',
+  sourceFor: (namespace, name) =>
+    `https://github.com/coder/registry/tree/main/registry/${namespace}/modules/${name}`,
+  sourceCommit: registryCommit,
+  license: repoLicense(join(root, 'vendor/registry')),
+});
+
+const sortUnits = (units) => units.sort((a, b) => a.path.localeCompare(b.path));
+
+// The index is intentionally deterministic: it contains only data derived from
+// the pinned source commits, so regenerating it never produces spurious diffs
+// in CI. There is no wall-clock timestamp.
+const index = {
+  schemaVersion: SCHEMA_VERSION,
+  sources: {
+    coder: { repository: 'https://github.com/coder/coder', commit: coderCommit },
+    registry: { repository: 'https://github.com/coder/registry', commit: registryCommit },
+  },
+  templates: sortUnits(templates),
+  modules: sortUnits(modules),
+};
+
 mkdirSync(join(root, 'catalog'), { recursive: true });
-writeFileSync(join(root, 'catalog/index.json'), JSON.stringify({ generatedAt: new Date().toISOString(), sources: { coder: { repository: 'https://github.com/coder/coder', commit: coderCommit }, registry: { repository: 'https://github.com/coder/registry', commit: registryCommit } }, templates, modules }, null, 2) + '\n');
-console.log(`Indexed ${templates.length} templates and ${modules.length} modules.`);
+writeFileSync(join(root, 'catalog/index.json'), `${JSON.stringify(index, null, 2)}\n`);
+console.log(`Indexed ${index.templates.length} templates and ${index.modules.length} modules.`);

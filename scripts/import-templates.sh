@@ -3,21 +3,29 @@ set -Eeuo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 mkdir -p catalog/templates/coder catalog/templates/registry
-if command -v rsync >/dev/null 2>&1; then
-  rsync -a --delete --exclude='.git' vendor/coder/examples/templates/ catalog/templates/coder/
-else
-  find catalog/templates/coder -mindepth 1 -maxdepth 1 -exec rm -rf {} +
-  cp -a vendor/coder/examples/templates/. catalog/templates/coder/
-fi
+
+# Copy a directory tree, replacing the destination so removed upstream files do
+# not linger. rsync is used when available; the cp fallback removes the whole
+# destination first (rm -rf) so nested directories are fully replaced too.
+sync_tree() {
+  local src="$1" dest="$2"
+  mkdir -p "$dest"
+  if command -v rsync >/dev/null 2>&1; then
+    rsync -a --delete --exclude='.git' "$src/" "$dest/"
+  else
+    rm -rf "$dest"
+    mkdir -p "$dest"
+    cp -a "$src/." "$dest/"
+  fi
+}
+
+[[ -d vendor/coder/examples/templates ]] || { echo 'Missing vendor/coder/examples/templates; run: git submodule update --init' >&2; exit 1; }
+[[ -d vendor/registry/registry ]] || { echo 'Missing vendor/registry/registry; run: git submodule update --init' >&2; exit 1; }
+
+sync_tree vendor/coder/examples/templates catalog/templates/coder
+
 for namespace in vendor/registry/registry/*; do
   [[ -d "$namespace/templates" ]] || continue
-  ns=$(basename "$namespace")
-  mkdir -p "catalog/templates/registry/$ns"
-  if command -v rsync >/dev/null 2>&1; then
-    rsync -a --delete --exclude='.git' "$namespace/templates/" "catalog/templates/registry/$ns/"
-  else
-    find "catalog/templates/registry/$ns" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
-    cp -a "$namespace/templates/." "catalog/templates/registry/$ns/"
-  fi
+  sync_tree "$namespace/templates" "catalog/templates/registry/$(basename "$namespace")"
 done
 printf 'Imported %s template files.\n' "$(find catalog/templates -type f | wc -l)"

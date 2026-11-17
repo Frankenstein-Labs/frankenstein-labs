@@ -15,7 +15,9 @@ La synchronisation est relançable avec `scripts/sync-coder.sh`, `scripts/sync-r
 
 ## API réelle et déploiement
 
-`services/api` relaie les endpoints Coder sous `/api/coder/*` avec `Coder-Session-Token` côté serveur. Il ne fabrique ni utilisateurs ni workspaces. `services/worker` synchronise les sources et ne provisionne pas de cloud. `render.yaml`, `Dockerfile`, `docker-compose.yml`, `.env.example` et `docs/RENDER_DEPLOYMENT.md` préparent le déploiement Render avec serveur Coder durable, PostgreSQL, API et worker.
+`services/api` relaie les endpoints Coder sous `/api/coder/*` avec `Coder-Session-Token` côté serveur. Il ne fabrique ni utilisateurs ni workspaces. Toute requête `/api/*` exige l’en-tête `x-frankenstein-api-secret` ; l’API refuse de démarrer sans `FRANKENSTEIN_API_SECRET` (sauf `ALLOW_INSECURE_NO_AUTH=1`, réservé au développement local). `services/worker` synchronise les sources et ne provisionne pas de cloud. `render.yaml`, `Dockerfile`, `docker-compose.yml`, `.env.example` et `docs/RENDER_DEPLOYMENT.md` préparent le déploiement Render avec serveur Coder durable, PostgreSQL, API et worker.
+
+Le `Dockerfile` racine et `render.yaml` utilisent l’image officielle Coder épinglée par digest (`ghcr.io/coder/coder`), et non une reconstruction locale : le commit amont exige Go 1.26 et la chaîne complète de génération (protoc, mockgen, frontend pnpm), ce qui rend un build depuis les sources lent et fragile. Voir les commentaires en tête du `Dockerfile`.
 
 Coder et les workspaces exigent une infrastructure durable, PostgreSQL, un provisioner Terraform et un environnement de calcul. Render ne fournit pas automatiquement un socket Docker pour les workspaces; un hôte Docker ou un provisioner externe doit être configuré et testé. Les données utilisateur doivent rester sur des volumes persistants Coder, pas sur le disque éphémère des services API/worker.
 
@@ -26,7 +28,12 @@ git clone --recurse-submodules https://github.com/Frankenstein-Labs/frankenstein
 cd frankenstein-labs
 bash scripts/import-catalog.sh
 bash scripts/validate-catalog.sh
+node --test "tests/*.test.mjs"
 ```
+
+`catalog/index.json` est déterministe : le régénérer ne produit aucun diff
+tant que les commits amont sont inchangés. `scripts/validate-catalog.sh`
+échoue si l’index diverge des fichiers matérialisés.
 
 Pour une exécution locale, renseignez `.env` à partir de `.env.example`, puis utilisez `docker compose up`. Les secrets doivent rester hors Git.
 

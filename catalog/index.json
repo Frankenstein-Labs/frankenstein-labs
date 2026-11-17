@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-17T18:19:12.291Z",
+  "schemaVersion": 2,
   "sources": {
     "coder": {
       "repository": "https://github.com/coder/coder",
@@ -16,10 +16,10 @@
       "namespace": "coder",
       "name": "aws-devcontainer",
       "path": "catalog/templates/coder/aws-devcontainer",
-      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/aws-devcontainer",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/aws-devcontainer",
       "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
-      "license": null,
-      "description": "---",
+      "license": "AGPL-3.0",
+      "description": "Provision AWS EC2 VMs with a devcontainer as Coder workspaces",
       "files": [
         "README.md",
         "architecture.svg",
@@ -31,10 +31,10 @@
       "namespace": "coder",
       "name": "aws-linux",
       "path": "catalog/templates/coder/aws-linux",
-      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/aws-linux",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/aws-linux",
       "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
-      "license": null,
-      "description": "---",
+      "license": "AGPL-3.0",
+      "description": "Provision AWS EC2 VMs as Coder workspaces",
       "files": [
         "README.md",
         "main.tf"
@@ -45,10 +45,10 @@
       "namespace": "coder",
       "name": "aws-multi-agent",
       "path": "catalog/templates/coder/aws-multi-agent",
-      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/aws-multi-agent",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/aws-multi-agent",
       "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
-      "license": null,
-      "description": "---",
+      "license": "AGPL-3.0",
+      "description": "Verify AWS instance identity auth for two Coder agents on one EC2 instance",
       "files": [
         "README.md",
         "main.tf"
@@ -59,10 +59,10 @@
       "namespace": "coder",
       "name": "aws-windows",
       "path": "catalog/templates/coder/aws-windows",
-      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/aws-windows",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/aws-windows",
       "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
-      "license": null,
-      "description": "---",
+      "license": "AGPL-3.0",
+      "description": "Provision AWS EC2 VMs as Coder workspaces",
       "files": [
         "README.md",
         "main.tf"
@@ -73,10 +73,10 @@
       "namespace": "coder",
       "name": "azure-linux",
       "path": "catalog/templates/coder/azure-linux",
-      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/azure-linux",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/azure-linux",
       "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
-      "license": null,
-      "description": "---",
+      "license": "AGPL-3.0",
+      "description": "Provision Azure VMs as Coder workspaces",
       "files": [
         "README.md",
         "main.tf"
@@ -87,10 +87,10 @@
       "namespace": "coder",
       "name": "azure-windows",
       "path": "catalog/templates/coder/azure-windows",
-      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/azure-windows",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/azure-windows",
       "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
-      "license": null,
-      "description": "---",
+      "license": "AGPL-3.0",
+      "description": "Provision Azure VMs as Coder workspaces",
       "files": [
         "FirstLogonCommands.xml",
         "Initialize.ps1.tftpl",
@@ -103,10 +103,10 @@
       "namespace": "coder",
       "name": "digitalocean-linux",
       "path": "catalog/templates/coder/digitalocean-linux",
-      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/digitalocean-linux",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/digitalocean-linux",
       "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
-      "license": null,
-      "description": "---",
+      "license": "AGPL-3.0",
+      "description": "Provision DigitalOcean Droplets as Coder workspaces",
       "files": [
         "README.md",
         "cloud-config.yaml.tftpl",
@@ -118,10 +118,10 @@
       "namespace": "coder",
       "name": "docker",
       "path": "catalog/templates/coder/docker",
-      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/docker",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/docker",
       "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
-      "license": null,
-      "description": "---",
+      "license": "AGPL-3.0",
+      "description": "Provision Docker containers as Coder workspaces",
       "files": [
         "README.md",
         "main.tf"
@@ -132,10 +132,10 @@
       "namespace": "coder",
       "name": "docker-devcontainer",
       "path": "catalog/templates/coder/docker-devcontainer",
-      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/docker-devcontainer",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/docker-devcontainer",
       "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
-      "license": null,
-      "description": "---",
+      "license": "AGPL-3.0",
+      "description": "Provision Docker containers as Coder workspaces running Dev Containers via Docker-in-Docker.",
       "files": [
         "README.md",
         "main.tf"
@@ -146,10 +146,10 @@
       "namespace": "coder",
       "name": "docker-envbuilder",
       "path": "catalog/templates/coder/docker-envbuilder",
-      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/docker-envbuilder",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/docker-envbuilder",
       "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
-      "license": null,
-      "description": "---",
+      "license": "AGPL-3.0",
+      "description": "Provision envbuilder containers as Coder workspaces",
       "files": [
         "README.md",
         "main.tf"
@@ -160,10 +160,10 @@
       "namespace": "coder",
       "name": "gcp-devcontainer",
       "path": "catalog/templates/coder/gcp-devcontainer",
-      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/gcp-devcontainer",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/gcp-devcontainer",
       "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
-      "license": null,
-      "description": "---",
+      "license": "AGPL-3.0",
+      "description": "Provision a Devcontainer on Google Compute Engine instances as Coder workspaces",
       "files": [
         "README.md",
         "architecture.svg",
@@ -175,10 +175,10 @@
       "namespace": "coder",
       "name": "gcp-linux",
       "path": "catalog/templates/coder/gcp-linux",
-      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/gcp-linux",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/gcp-linux",
       "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
-      "license": null,
-      "description": "---",
+      "license": "AGPL-3.0",
+      "description": "Provision Google Compute Engine instances as Coder workspaces",
       "files": [
         "README.md",
         "main.tf"
@@ -189,10 +189,10 @@
       "namespace": "coder",
       "name": "gcp-vm-container",
       "path": "catalog/templates/coder/gcp-vm-container",
-      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/gcp-vm-container",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/gcp-vm-container",
       "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
-      "license": null,
-      "description": "---",
+      "license": "AGPL-3.0",
+      "description": "Provision Google Compute Engine instances as Coder workspaces",
       "files": [
         "README.md",
         "main.tf"
@@ -203,10 +203,10 @@
       "namespace": "coder",
       "name": "gcp-windows",
       "path": "catalog/templates/coder/gcp-windows",
-      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/gcp-windows",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/gcp-windows",
       "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
-      "license": null,
-      "description": "---",
+      "license": "AGPL-3.0",
+      "description": "Provision Google Compute Engine instances as Coder workspaces",
       "files": [
         "README.md",
         "main.tf"
@@ -217,10 +217,10 @@
       "namespace": "coder",
       "name": "incus",
       "path": "catalog/templates/coder/incus",
-      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/incus",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/incus",
       "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
-      "license": null,
-      "description": "---",
+      "license": "AGPL-3.0",
+      "description": "Develop in an Incus System Container with Docker using Incus",
       "files": [
         "README.md",
         "main.tf"
@@ -231,10 +231,10 @@
       "namespace": "coder",
       "name": "kubernetes",
       "path": "catalog/templates/coder/kubernetes",
-      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/kubernetes",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/kubernetes",
       "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
-      "license": null,
-      "description": "---",
+      "license": "AGPL-3.0",
+      "description": "Provision Kubernetes Deployments as Coder workspaces",
       "files": [
         "README.md",
         "main.tf"
@@ -245,10 +245,10 @@
       "namespace": "coder",
       "name": "kubernetes-devcontainer",
       "path": "catalog/templates/coder/kubernetes-devcontainer",
-      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/kubernetes-devcontainer",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/kubernetes-devcontainer",
       "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
-      "license": null,
-      "description": "---",
+      "license": "AGPL-3.0",
+      "description": "Provision envbuilder pods as Coder workspaces",
       "files": [
         "README.md",
         "main.tf"
@@ -259,10 +259,10 @@
       "namespace": "coder",
       "name": "kubernetes-envbox",
       "path": "catalog/templates/coder/kubernetes-envbox",
-      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/kubernetes-envbox",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/kubernetes-envbox",
       "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
-      "license": null,
-      "description": "---",
+      "license": "AGPL-3.0",
+      "description": "Provision envbox pods as Coder workspaces",
       "files": [
         "README.md",
         "main.tf"
@@ -273,10 +273,10 @@
       "namespace": "coder",
       "name": "kubernetes-podman-rootless",
       "path": "catalog/templates/coder/kubernetes-podman-rootless",
-      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/kubernetes-podman-rootless",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/kubernetes-podman-rootless",
       "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
-      "license": null,
-      "description": "---",
+      "license": "AGPL-3.0",
+      "description": "Provision rootless Podman pods as Coder workspaces",
       "files": [
         "README.md",
         "main.tf"
@@ -287,10 +287,10 @@
       "namespace": "coder",
       "name": "nomad-docker",
       "path": "catalog/templates/coder/nomad-docker",
-      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/nomad-docker",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/nomad-docker",
       "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
-      "license": null,
-      "description": "---",
+      "license": "AGPL-3.0",
+      "description": "Provision Nomad Jobs as Coder workspaces",
       "files": [
         "README.md",
         "main.tf",
@@ -302,10 +302,10 @@
       "namespace": "coder",
       "name": "quickstart",
       "path": "catalog/templates/coder/quickstart",
-      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/quickstart",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/quickstart",
       "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
-      "license": null,
-      "description": "---",
+      "license": "AGPL-3.0",
+      "description": "Get started with Coder by picking your languages, editors, and a repo",
       "files": [
         "README.md",
         "install-languages.sh.tftpl",
@@ -317,10 +317,10 @@
       "namespace": "coder",
       "name": "scratch",
       "path": "catalog/templates/coder/scratch",
-      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/scratch",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/scratch",
       "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
-      "license": null,
-      "description": "---",
+      "license": "AGPL-3.0",
+      "description": "A minimal starter template for Coder",
       "files": [
         "README.md",
         "main.tf"
@@ -329,14 +329,17 @@
     {
       "kind": "template",
       "namespace": "coder",
-      "name": "x",
-      "path": "catalog/templates/coder/x",
-      "source": "https://github.com/coder/coder/tree/main/examples/templates/coder/templates/x",
+      "name": "x/docker-chat-sandbox",
+      "path": "catalog/templates/coder/x/docker-chat-sandbox",
+      "source": "https://github.com/coder/coder/tree/main/examples/templates/x/docker-chat-sandbox",
       "commit": "a3f25a491e8a6c7414f1f37047334b4ade06bf3f",
-      "license": null,
-      "description": "Templates in this directory are experimental and may change or be removed without notice.",
+      "license": "AGPL-3.0",
+      "description": "Two-agent Docker template with a bubblewrap-sandboxed chat agent",
       "files": [
-        "README.md"
+        "Dockerfile.chat",
+        "README.md",
+        "bwrap-agent.sh",
+        "main.tf"
       ]
     },
     {
@@ -346,8 +349,8 @@
       "path": "catalog/templates/registry/anis/oci-vm",
       "source": "https://github.com/coder/registry/tree/main/registry/anis/templates/oci-vm",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Provision Oracle Cloud Infrastructure (OCI) instances as Coder workspaces",
       "files": [
         "README.md",
         "main.tf"
@@ -360,8 +363,8 @@
       "path": "catalog/templates/registry/anis/vmware-linux",
       "source": "https://github.com/coder/registry/tree/main/registry/anis/templates/vmware-linux",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Provision VMware vSphere virtual machines as Coder workspaces",
       "files": [
         "README.md",
         "main.tf"
@@ -374,8 +377,8 @@
       "path": "catalog/templates/registry/bpmct/incus-nixos",
       "source": "https://github.com/coder/registry/tree/main/registry/bpmct/templates/incus-nixos",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Run a NixOS virtual machine on a local Incus host",
       "files": [
         "README.md",
         "main.tf"
@@ -388,8 +391,8 @@
       "path": "catalog/templates/registry/bpmct/incus-vm",
       "source": "https://github.com/coder/registry/tree/main/registry/bpmct/templates/incus-vm",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Run a full virtual machine on a local Incus host",
       "files": [
         "README.md",
         "main.tf"
@@ -402,323 +405,8 @@
       "path": "catalog/templates/registry/bpmct/railway",
       "source": "https://github.com/coder/registry/tree/main/registry/bpmct/templates/railway",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "README.md",
-        "main.tf"
-      ]
-    },
-    {
-      "kind": "template",
-      "namespace": "coder",
-      "name": "aws-envbuilder",
-      "path": "catalog/templates/registry/coder/aws-envbuilder",
-      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/aws-envbuilder",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "README.md",
-        "main.tf"
-      ]
-    },
-    {
-      "kind": "template",
-      "namespace": "coder",
-      "name": "aws-linux",
-      "path": "catalog/templates/registry/coder/aws-linux",
-      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/aws-linux",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "PREREQUISITES.md",
-        "README.md",
-        "main.tf"
-      ]
-    },
-    {
-      "kind": "template",
-      "namespace": "coder",
-      "name": "aws-windows",
-      "path": "catalog/templates/registry/coder/aws-windows",
-      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/aws-windows",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "README.md",
-        "main.tf"
-      ]
-    },
-    {
-      "kind": "template",
-      "namespace": "coder",
-      "name": "azure-linux",
-      "path": "catalog/templates/registry/coder/azure-linux",
-      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/azure-linux",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "README.md",
-        "main.tf"
-      ]
-    },
-    {
-      "kind": "template",
-      "namespace": "coder",
-      "name": "azure-windows",
-      "path": "catalog/templates/registry/coder/azure-windows",
-      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/azure-windows",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "FirstLogonCommands.xml",
-        "Initialize.ps1.tftpl",
-        "README.md",
-        "main.tf"
-      ]
-    },
-    {
-      "kind": "template",
-      "namespace": "coder",
-      "name": "digitalocean-linux",
-      "path": "catalog/templates/registry/coder/digitalocean-linux",
-      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/digitalocean-linux",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "README.md",
-        "cloud-config.yaml.tftpl",
-        "main.tf"
-      ]
-    },
-    {
-      "kind": "template",
-      "namespace": "coder",
-      "name": "docker",
-      "path": "catalog/templates/registry/coder/docker",
-      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/docker",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "README.md",
-        "main.tf"
-      ]
-    },
-    {
-      "kind": "template",
-      "namespace": "coder",
-      "name": "docker-agent-relay",
-      "path": "catalog/templates/registry/coder/docker-agent-relay",
-      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/docker-agent-relay",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "README.md",
-        "main.tf"
-      ]
-    },
-    {
-      "kind": "template",
-      "namespace": "coder",
-      "name": "docker-envbuilder",
-      "path": "catalog/templates/registry/coder/docker-envbuilder",
-      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/docker-envbuilder",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "README.md",
-        "main.tf"
-      ]
-    },
-    {
-      "kind": "template",
-      "namespace": "coder",
-      "name": "docker-rstudio",
-      "path": "catalog/templates/registry/coder/docker-rstudio",
-      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/docker-rstudio",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "README.md",
-        "main.tf"
-      ]
-    },
-    {
-      "kind": "template",
-      "namespace": "coder",
-      "name": "gcp-envbuilder",
-      "path": "catalog/templates/registry/coder/gcp-envbuilder",
-      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/gcp-envbuilder",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "README.md",
-        "main.tf"
-      ]
-    },
-    {
-      "kind": "template",
-      "namespace": "coder",
-      "name": "gcp-linux",
-      "path": "catalog/templates/registry/coder/gcp-linux",
-      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/gcp-linux",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "README.md",
-        "main.tf"
-      ]
-    },
-    {
-      "kind": "template",
-      "namespace": "coder",
-      "name": "gcp-vm-container",
-      "path": "catalog/templates/registry/coder/gcp-vm-container",
-      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/gcp-vm-container",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "README.md",
-        "main.tf"
-      ]
-    },
-    {
-      "kind": "template",
-      "namespace": "coder",
-      "name": "gcp-windows",
-      "path": "catalog/templates/registry/coder/gcp-windows",
-      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/gcp-windows",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "README.md",
-        "main.tf"
-      ]
-    },
-    {
-      "kind": "template",
-      "namespace": "coder",
-      "name": "incus",
-      "path": "catalog/templates/registry/coder/incus",
-      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/incus",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "README.md",
-        "main.tf"
-      ]
-    },
-    {
-      "kind": "template",
-      "namespace": "coder",
-      "name": "kubernetes",
-      "path": "catalog/templates/registry/coder/kubernetes",
-      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/kubernetes",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "README.md",
-        "main.tf"
-      ]
-    },
-    {
-      "kind": "template",
-      "namespace": "coder",
-      "name": "kubernetes-agent-relay",
-      "path": "catalog/templates/registry/coder/kubernetes-agent-relay",
-      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/kubernetes-agent-relay",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "README.md",
-        "main.tf"
-      ]
-    },
-    {
-      "kind": "template",
-      "namespace": "coder",
-      "name": "kubernetes-envbox",
-      "path": "catalog/templates/registry/coder/kubernetes-envbox",
-      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/kubernetes-envbox",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "README.md",
-        "main.tf"
-      ]
-    },
-    {
-      "kind": "template",
-      "namespace": "coder",
-      "name": "kubernetes-envbuilder",
-      "path": "catalog/templates/registry/coder/kubernetes-envbuilder",
-      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/kubernetes-envbuilder",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "README.md",
-        "main.tf"
-      ]
-    },
-    {
-      "kind": "template",
-      "namespace": "coder",
-      "name": "nomad-docker",
-      "path": "catalog/templates/registry/coder/nomad-docker",
-      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/nomad-docker",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "README.md",
-        "main.tf",
-        "workspace.nomad.tpl"
-      ]
-    },
-    {
-      "kind": "template",
-      "namespace": "coder",
-      "name": "openshift",
-      "path": "catalog/templates/registry/coder/openshift",
-      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/openshift",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "README.md",
-        "main.tf",
-        "main.tftest.hcl",
-        "parameters.tf"
-      ]
-    },
-    {
-      "kind": "template",
-      "namespace": "coder",
-      "name": "scratch",
-      "path": "catalog/templates/registry/coder/scratch",
-      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/scratch",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Coder workspaces backed by Railway services, provisioned via direct GraphQL calls (no community Terraform provider).",
       "files": [
         "README.md",
         "main.tf"
@@ -731,8 +419,8 @@
       "path": "catalog/templates/registry/coder-labs/aws-fargate",
       "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/templates/aws-fargate",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Provision Kubernetes Deployments on Amazon EKS Fargate as Coder workspaces, with home directories on Amazon EFS",
       "files": [
         "README.md",
         "main.tf"
@@ -745,8 +433,8 @@
       "path": "catalog/templates/registry/coder-labs/aws-nixos",
       "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/templates/aws-nixos",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Provision NixOS EC2 VMs as Coder workspaces from a flake",
       "files": [
         "README.md",
         "main.tf"
@@ -759,8 +447,8 @@
       "path": "catalog/templates/registry/coder-labs/coder-cli",
       "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/templates/coder-cli",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "A pre-authenticated Coder CLI workspace for operating a Coder deployment from the agent",
       "files": [
         "README.md",
         "main.tf"
@@ -773,8 +461,8 @@
       "path": "catalog/templates/registry/coder-labs/docker-build",
       "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/templates/docker-build",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Build Docker containers from Dockerfile as Coder workspaces",
       "files": [
         "README.md",
         "main.tf"
@@ -787,8 +475,8 @@
       "path": "catalog/templates/registry/coder-labs/externally-managed-workspace",
       "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/templates/externally-managed-workspace",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "A template to provision externally managed resources as Coder workspaces",
       "files": [
         "README.md",
         "main.tf"
@@ -801,8 +489,8 @@
       "path": "catalog/templates/registry/coder-labs/kiro-crew",
       "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/templates/kiro-crew",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Kubernetes workspaces running the Kiro Crew gateway and dashboard, with Kiro CLI, code-server, and a persistent home volume.",
       "files": [
         "README.md",
         "kiro-crew-prereqs.sh",
@@ -817,8 +505,8 @@
       "path": "catalog/templates/registry/coder-labs/kubernetes-agent-sandbox",
       "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/templates/kubernetes-agent-sandbox",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Run each workspace in an agent-sandbox Sandbox with gVisor or Kata isolation and a NetworkPolicy firewall",
       "files": [
         "README.md",
         "main.tf"
@@ -831,8 +519,8 @@
       "path": "catalog/templates/registry/coder-labs/kubernetes-openshell",
       "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/templates/kubernetes-openshell",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Run each workspace in an NVIDIA OpenShell sandbox, with a firewall by host name and program",
       "files": [
         "README.md",
         "launcher.sh",
@@ -846,8 +534,8 @@
       "path": "catalog/templates/registry/coder-labs/kubernetes-sandboxed",
       "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/templates/kubernetes-sandboxed",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Run each workspace in a plain Kubernetes Pod behind a host name firewall, with optional gVisor or Kata isolation",
       "files": [
         "README.md",
         "main.tf",
@@ -857,13 +545,328 @@
     },
     {
       "kind": "template",
+      "namespace": "coder",
+      "name": "aws-envbuilder",
+      "path": "catalog/templates/registry/coder/aws-envbuilder",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/aws-envbuilder",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "Provision AWS EC2 VMs from a Devcontainer (via Envbuilder) as Coder workspaces",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "aws-linux",
+      "path": "catalog/templates/registry/coder/aws-linux",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/aws-linux",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "Provision AWS EC2 VMs as Coder workspaces",
+      "files": [
+        "PREREQUISITES.md",
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "aws-windows",
+      "path": "catalog/templates/registry/coder/aws-windows",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/aws-windows",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "Provision AWS EC2 VMs as Coder workspaces",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "azure-linux",
+      "path": "catalog/templates/registry/coder/azure-linux",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/azure-linux",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "Provision Azure VMs as Coder workspaces",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "azure-windows",
+      "path": "catalog/templates/registry/coder/azure-windows",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/azure-windows",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "Provision Azure VMs as Coder workspaces",
+      "files": [
+        "FirstLogonCommands.xml",
+        "Initialize.ps1.tftpl",
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "digitalocean-linux",
+      "path": "catalog/templates/registry/coder/digitalocean-linux",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/digitalocean-linux",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "Provision DigitalOcean Droplets as Coder workspaces",
+      "files": [
+        "README.md",
+        "cloud-config.yaml.tftpl",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "docker",
+      "path": "catalog/templates/registry/coder/docker",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/docker",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "Provision Docker containers as Coder workspaces",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "docker-agent-relay",
+      "path": "catalog/templates/registry/coder/docker-agent-relay",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/docker-agent-relay",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "Serve Agent Relay Claude Code and Cursor sessions from one template, one Docker container per session",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "docker-envbuilder",
+      "path": "catalog/templates/registry/coder/docker-envbuilder",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/docker-envbuilder",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "Provision envbuilder containers as Coder workspaces",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "docker-rstudio",
+      "path": "catalog/templates/registry/coder/docker-rstudio",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/docker-rstudio",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "Provision Docker containers with RStudio, code-server, and RMarkdown",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "gcp-envbuilder",
+      "path": "catalog/templates/registry/coder/gcp-envbuilder",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/gcp-envbuilder",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "Provision Google Compute Engine instances from a Devcontainer (via Envbuilder) as Coder workspaces",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "gcp-linux",
+      "path": "catalog/templates/registry/coder/gcp-linux",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/gcp-linux",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "Provision Google Compute Engine instances as Coder workspaces",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "gcp-vm-container",
+      "path": "catalog/templates/registry/coder/gcp-vm-container",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/gcp-vm-container",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "Provision Google Compute Engine instances as Coder workspaces",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "gcp-windows",
+      "path": "catalog/templates/registry/coder/gcp-windows",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/gcp-windows",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "Provision Google Compute Engine instances as Coder workspaces",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "incus",
+      "path": "catalog/templates/registry/coder/incus",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/incus",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "Develop in an Incus System Container with Docker using incus",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "kubernetes",
+      "path": "catalog/templates/registry/coder/kubernetes",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/kubernetes",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "Provision Kubernetes Deployments as Coder workspaces",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "kubernetes-agent-relay",
+      "path": "catalog/templates/registry/coder/kubernetes-agent-relay",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/kubernetes-agent-relay",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "Serve Agent Relay Claude Code and Cursor sessions from one template, one Kubernetes Pod per session",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "kubernetes-envbox",
+      "path": "catalog/templates/registry/coder/kubernetes-envbox",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/kubernetes-envbox",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "Provision envbox pods as Coder workspaces",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "kubernetes-envbuilder",
+      "path": "catalog/templates/registry/coder/kubernetes-envbuilder",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/kubernetes-envbuilder",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "Provision Kubernetes pods from a Devcontainer (via Envbuilder) as Coder workspaces",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "nomad-docker",
+      "path": "catalog/templates/registry/coder/nomad-docker",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/nomad-docker",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "Provision Nomad Jobs as Coder workspaces",
+      "files": [
+        "README.md",
+        "main.tf",
+        "workspace.nomad.tpl"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "openshift",
+      "path": "catalog/templates/registry/coder/openshift",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/openshift",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "Provision OpenShift workspaces with arbitrary UIDs and persistent home directories under restricted-v2",
+      "files": [
+        "README.md",
+        "main.tf",
+        "main.tftest.hcl",
+        "parameters.tf"
+      ]
+    },
+    {
+      "kind": "template",
+      "namespace": "coder",
+      "name": "scratch",
+      "path": "catalog/templates/registry/coder/scratch",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder/templates/scratch",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "A minimal starter template for Coder",
+      "files": [
+        "README.md",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "template",
       "namespace": "ericpaulsen",
       "name": "k8s-username",
       "path": "catalog/templates/registry/ericpaulsen/k8s-username",
       "source": "https://github.com/coder/registry/tree/main/registry/ericpaulsen/templates/k8s-username",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Provision Kubernetes Deployments as Coder workspaces with your Username",
       "files": [
         "README.md",
         "main.tf"
@@ -876,8 +879,8 @@
       "path": "catalog/templates/registry/ericpaulsen/nfs-deployment",
       "source": "https://github.com/coder/registry/tree/main/registry/ericpaulsen/templates/nfs-deployment",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Mount an NFS share to a Coder K8s workspace",
       "files": [
         "README.md",
         "main.tf"
@@ -890,8 +893,8 @@
       "path": "catalog/templates/registry/excellencedev/hetzner-linux",
       "source": "https://github.com/coder/registry/tree/main/registry/excellencedev/templates/hetzner-linux",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Provision Hetzner Cloud servers as Coder workspaces",
       "files": [
         "README.md",
         "cloud-config.yaml.tftpl",
@@ -905,8 +908,8 @@
       "path": "catalog/templates/registry/iamtaochen/ssh-linux",
       "source": "https://github.com/coder/registry/tree/main/registry/iamtaochen/templates/ssh-linux",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Provision an existing Linux system as a workspace by deploying the Coder agent via SSH with this example template.",
       "files": [
         "README.md",
         "main.tf"
@@ -919,8 +922,8 @@
       "path": "catalog/templates/registry/joergklein/docker-texlive",
       "source": "https://github.com/coder/registry/tree/main/registry/joergklein/templates/docker-texlive",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Provision Docker containers with TeX Live, code-server",
       "files": [
         "README.md",
         "main.tf"
@@ -933,8 +936,8 @@
       "path": "catalog/templates/registry/matifali/omnigent-docker",
       "source": "https://github.com/coder/registry/tree/main/registry/matifali/templates/omnigent-docker",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Omnigent with Claude Code, Codex, and Coder AI Gateway on Docker.",
       "files": [
         "README.md",
         "main.tf"
@@ -947,8 +950,8 @@
       "path": "catalog/templates/registry/mossylion/scaleway-instance",
       "source": "https://github.com/coder/registry/tree/main/registry/mossylion/templates/scaleway-instance",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "A workspace spun up on a Scaleway Instance",
       "files": [
         "README.md",
         "main.tf",
@@ -962,8 +965,8 @@
       "path": "catalog/templates/registry/sharkymark/docker-claude",
       "source": "https://github.com/coder/registry/tree/main/registry/sharkymark/templates/docker-claude",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "An experimental AI agent integration with Claude CodeAI agent",
       "files": [
         "README.md",
         "main.tf"
@@ -976,8 +979,8 @@
       "path": "catalog/templates/registry/umair/linode-vm",
       "source": "https://github.com/coder/registry/tree/main/registry/umair/templates/linode-vm",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Provision Linode instances as Coder workspaces",
       "files": [
         "README.md",
         "main.tf"
@@ -990,8 +993,8 @@
       "path": "catalog/templates/registry/umair/proxmox-vm",
       "source": "https://github.com/coder/registry/tree/main/registry/umair/templates/proxmox-vm",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Provision VMs on Proxmox VE as Coder workspaces",
       "files": [
         "README.md",
         "main.tf"
@@ -1006,26 +1009,11 @@
       "path": "catalog/modules/registry/AJ0070/pgadmin",
       "source": "https://github.com/coder/registry/tree/main/registry/AJ0070/modules/pgadmin",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "A web-based interface for managing PostgreSQL databases in your Coder workspace.",
       "files": [
         "README.md",
         "main.test.ts",
-        "main.tf",
-        "run.sh"
-      ]
-    },
-    {
-      "kind": "module",
-      "namespace": "BenraouaneSoufiane",
-      "name": "rustdesk",
-      "path": "catalog/modules/registry/BenraouaneSoufiane/rustdesk",
-      "source": "https://github.com/coder/registry/tree/main/registry/BenraouaneSoufiane/modules/rustdesk",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "README.md",
         "main.tf",
         "run.sh"
       ]
@@ -1037,8 +1025,8 @@
       "path": "catalog/modules/registry/anomaly/tmux",
       "source": "https://github.com/coder/registry/tree/main/registry/anomaly/modules/tmux",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "tmux with session persistence and plugins",
       "files": [
         "README.md",
         "main.test.ts",
@@ -1052,8 +1040,8 @@
       "path": "catalog/modules/registry/attractivetoad/python",
       "source": "https://github.com/coder/registry/tree/main/registry/attractivetoad/modules/python",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Install and manage a configurable Python version with pyenv",
       "files": [
         "README.md",
         "main.test.ts",
@@ -1063,15 +1051,288 @@
     },
     {
       "kind": "module",
+      "namespace": "BenraouaneSoufiane",
+      "name": "rustdesk",
+      "path": "catalog/modules/registry/BenraouaneSoufiane/rustdesk",
+      "source": "https://github.com/coder/registry/tree/main/registry/BenraouaneSoufiane/modules/rustdesk",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "Run RustDesk in your workspace with virtual display",
+      "files": [
+        "README.md",
+        "main.tf",
+        "run.sh"
+      ]
+    },
+    {
+      "kind": "module",
       "namespace": "bpmct",
       "name": "onepassword",
       "path": "catalog/modules/registry/bpmct/onepassword",
       "source": "https://github.com/coder/registry/tree/main/registry/bpmct/modules/onepassword",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Install the 1Password CLI and VS Code extension in your Coder workspace",
       "files": [
         "README.md",
+        "main.tf",
+        "run.sh"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder-labs",
+      "name": "archive",
+      "path": "catalog/modules/registry/coder-labs/archive",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/archive",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "Create automated and user-invocable scripts that archive and extract selected files/directories with optional compression (gzip or zstd).",
+      "files": [
+        "README.md",
+        "archive.tftest.hcl",
+        "main.test.ts",
+        "main.tf",
+        "run.sh"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder-labs",
+      "name": "auggie",
+      "path": "catalog/modules/registry/coder-labs/auggie",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/auggie",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "Install and configure Augment's Auggie CLI in your workspace.",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder-labs",
+      "name": "codex",
+      "path": "catalog/modules/registry/coder-labs/codex",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/codex",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "Install and configure the Codex CLI in your workspace.",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder-labs",
+      "name": "copilot",
+      "path": "catalog/modules/registry/coder-labs/copilot",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/copilot",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "GitHub Copilot CLI agent for AI-powered terminal assistance",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder-labs",
+      "name": "cursor-cli",
+      "path": "catalog/modules/registry/coder-labs/cursor-cli",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/cursor-cli",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "Install and configure the Cursor Agent CLI in your workspace.",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder-labs",
+      "name": "kiro-crew",
+      "path": "catalog/modules/registry/coder-labs/kiro-crew",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/kiro-crew",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "Run the Kiro Crew gateway in your workspace and open its web dashboard from a self-authenticating Coder app.",
+      "files": [
+        "README.md",
+        "kiro-crew.tftest.hcl",
+        "main.test.ts",
+        "main.tf"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder-labs",
+      "name": "mcp-servers",
+      "path": "catalog/modules/registry/coder-labs/mcp-servers",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/mcp-servers",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "Select and configure popular official MCP servers for multiple workspace agents.",
+      "files": [
+        "README.md",
+        "auth.test.ts",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder-labs",
+      "name": "nextflow",
+      "path": "catalog/modules/registry/coder-labs/nextflow",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/nextflow",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "A module that adds Nextflow to your Coder template.",
+      "files": [
+        "README.md",
+        "main.tf",
+        "run.sh"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder-labs",
+      "name": "nix",
+      "path": "catalog/modules/registry/coder-labs/nix",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/nix",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "Build a workspace from a NixOS flake on boot and/or open nix develop shells",
+      "files": [
+        "README.md",
+        "develop.tf",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl",
+        "nixos.tf"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder-labs",
+      "name": "open-webui",
+      "path": "catalog/modules/registry/coder-labs/open-webui",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/open-webui",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "A self-hosted AI chat interface supporting various LLM providers",
+      "files": [
+        "README.md",
+        "main.tf",
+        "main.tftest.hcl",
+        "run.sh"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder-labs",
+      "name": "opencode",
+      "path": "catalog/modules/registry/coder-labs/opencode",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/opencode",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "Install and configure the OpenCode AI coding agent in your workspace.",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder-labs",
+      "name": "perplexica",
+      "path": "catalog/modules/registry/coder-labs/perplexica",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/perplexica",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "Run Perplexica AI search engine in your workspace via Docker",
+      "files": [
+        "README.md",
+        "main.tf",
+        "perplexica.tftest.hcl",
+        "run.sh"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder-labs",
+      "name": "pi",
+      "path": "catalog/modules/registry/coder-labs/pi",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/pi",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "Install and configure the Pi coding agent CLI in your workspace.",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder-labs",
+      "name": "pool",
+      "path": "catalog/modules/registry/coder-labs/pool",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/pool",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "Install and configure Poolside's Pool coding agent in your workspace.",
+      "files": [
+        "README.md",
+        "main.tf",
+        "main.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder-labs",
+      "name": "sourcegraph-amp",
+      "path": "catalog/modules/registry/coder-labs/sourcegraph-amp",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/sourcegraph-amp",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "Install and configure the Amp CLI in your workspace.",
+      "files": [
+        "README.md",
+        "main.test.ts",
+        "main.tf",
+        "main.tftest.hcl"
+      ]
+    },
+    {
+      "kind": "module",
+      "namespace": "coder-labs",
+      "name": "ttyd",
+      "path": "catalog/modules/registry/coder-labs/ttyd",
+      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/ttyd",
+      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
+      "license": "Apache-2.0",
+      "description": "Share a terminal command over the web via a Coder app",
+      "files": [
+        "README.md",
+        "main.test.ts",
         "main.tf",
         "run.sh"
       ]
@@ -1083,8 +1344,8 @@
       "path": "catalog/modules/registry/coder/agent-firewall",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/agent-firewall",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Configures agent-firewall for network isolation in Coder workspaces",
       "files": [
         "README.md",
         "agent-firewall.tftest.hcl",
@@ -1100,8 +1361,8 @@
       "path": "catalog/modules/registry/coder/agent-relay-claude-code",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/agent-relay-claude-code",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Serves Claude Code self-hosted runner sessions in Coder workspaces that Agent Relay dispatches.",
       "files": [
         "README.md",
         "cleanup.sh.tftpl",
@@ -1121,8 +1382,8 @@
       "path": "catalog/modules/registry/coder/agent-relay-cursor",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/agent-relay-cursor",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Serves Cursor cloud agent requests in Coder workspaces that Agent Relay dispatches.",
       "files": [
         "README.md",
         "cleanup.sh.tftpl",
@@ -1142,8 +1403,8 @@
       "path": "catalog/modules/registry/coder/agentapi",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/agentapi",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Building block for modules that need to run an AgentAPI server",
       "files": [
         "README.md",
         "agentapi.tftest.hcl",
@@ -1159,8 +1420,8 @@
       "path": "catalog/modules/registry/coder/aibridge-proxy",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/aibridge-proxy",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Configure a workspace to route AI tool traffic through AI Gateway via AI Gateway Proxy.",
       "files": [
         "README.md",
         "main.test.ts",
@@ -1175,8 +1436,8 @@
       "path": "catalog/modules/registry/coder/aider",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/aider",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Install and configure Aider AI pair programming in your workspace",
       "files": [
         "README.md",
         "main.test.ts",
@@ -1191,8 +1452,8 @@
       "path": "catalog/modules/registry/coder/amazon-dcv-windows",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/amazon-dcv-windows",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Amazon DCV Server and Web Client for Windows",
       "files": [
         "README.md",
         "amazon-dcv-windows.tftest.hcl",
@@ -1208,8 +1469,8 @@
       "path": "catalog/modules/registry/coder/antigravity",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/antigravity",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Add a one-click button to launch Google Antigravity",
       "files": [
         "README.md",
         "main.test.ts",
@@ -1223,8 +1484,8 @@
       "path": "catalog/modules/registry/coder/aws-ec2-instance-type",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/aws-ec2-instance-type",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "A parameter with human readable AWS EC2 instance type names",
       "files": [
         "README.md",
         "instance-types.json",
@@ -1239,8 +1500,8 @@
       "path": "catalog/modules/registry/coder/aws-region",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/aws-region",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "A parameter with human region names and icons",
       "files": [
         "README.md",
         "main.tf",
@@ -1255,8 +1516,8 @@
       "path": "catalog/modules/registry/coder/azure-region",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/azure-region",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "A parameter with human region names and icons",
       "files": [
         "README.md",
         "main.test.ts",
@@ -1270,8 +1531,8 @@
       "path": "catalog/modules/registry/coder/claude-code",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/claude-code",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Install and configure the Claude Code CLI in your workspace.",
       "files": [
         "README.md",
         "main.test.ts",
@@ -1286,8 +1547,8 @@
       "path": "catalog/modules/registry/coder/code-server",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/code-server",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "VS Code in the browser",
       "files": [
         "README.md",
         "code-server.tftest.hcl",
@@ -1303,8 +1564,8 @@
       "path": "catalog/modules/registry/coder/coder-login",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/coder-login",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Automatically logs the user into Coder on their workspace",
       "files": [
         "README.md",
         "main.test.ts",
@@ -1319,8 +1580,8 @@
       "path": "catalog/modules/registry/coder/coder-utils",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/coder-utils",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Building block for modules that need orchestrated script execution",
       "files": [
         "README.md",
         "main.test.ts",
@@ -1335,8 +1596,8 @@
       "path": "catalog/modules/registry/coder/cursor",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/cursor",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Add a one-click button to launch Cursor IDE",
       "files": [
         "README.md",
         "main.test.ts",
@@ -1350,8 +1611,8 @@
       "path": "catalog/modules/registry/coder/devcontainers-cli",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/devcontainers-cli",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "devcontainers-cli module provides an easy way to install @devcontainers/cli into a workspace",
       "files": [
         "README.md",
         "main.test.ts",
@@ -1367,8 +1628,8 @@
       "path": "catalog/modules/registry/coder/devin-desktop",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/devin-desktop",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Add a one-click button to launch Devin Desktop (formerly Windsurf Editor)",
       "files": [
         "README.md",
         "main.test.ts",
@@ -1383,8 +1644,8 @@
       "path": "catalog/modules/registry/coder/dotfiles",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/dotfiles",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Allow developers to optionally bring their own dotfiles repository to customize their shell and IDE settings!",
       "files": [
         "README.md",
         "main.test.ts",
@@ -1399,8 +1660,8 @@
       "path": "catalog/modules/registry/coder/filebrowser",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/filebrowser",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "A file browser for your workspace",
       "files": [
         "README.md",
         "main.test.ts",
@@ -1415,8 +1676,8 @@
       "path": "catalog/modules/registry/coder/gcp-region",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/gcp-region",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Add Google Cloud Platform regions to your Coder template.",
       "files": [
         "README.md",
         "main.test.ts",
@@ -1430,8 +1691,8 @@
       "path": "catalog/modules/registry/coder/git-clone",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/git-clone",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Clone a Git repository by URL and skip if it exists.",
       "files": [
         "README.md",
         "git-clone.tftest.hcl",
@@ -1447,8 +1708,8 @@
       "path": "catalog/modules/registry/coder/git-commit-signing",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/git-commit-signing",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Configures Git to sign commits using your Coder SSH key",
       "files": [
         "README.md",
         "main.tf",
@@ -1462,8 +1723,8 @@
       "path": "catalog/modules/registry/coder/git-config",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/git-config",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Stores Git configuration from Coder credentials",
       "files": [
         "README.md",
         "main.test.ts",
@@ -1477,8 +1738,8 @@
       "path": "catalog/modules/registry/coder/github-upload-public-key",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/github-upload-public-key",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Automates uploading Coder public key to Github so users don't have to.",
       "files": [
         "README.md",
         "main.test.ts",
@@ -1494,8 +1755,8 @@
       "path": "catalog/modules/registry/coder/goose",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/goose",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Install and configure the Goose AI agent in your workspace.",
       "files": [
         "README.md",
         "main.test.ts",
@@ -1510,8 +1771,8 @@
       "path": "catalog/modules/registry/coder/jetbrains",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/jetbrains",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Add JetBrains IDE integrations to your Coder workspaces with configurable options.",
       "files": [
         "README.md",
         "jetbrains.tftest.hcl",
@@ -1525,8 +1786,8 @@
       "path": "catalog/modules/registry/coder/jetbrains-gateway",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/jetbrains-gateway",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Add a one-click button to launch JetBrains Gateway IDEs in the dashboard.",
       "files": [
         "README.md",
         "main.test.ts",
@@ -1540,8 +1801,8 @@
       "path": "catalog/modules/registry/coder/jfrog-oauth",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/jfrog-oauth",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Install the JFrog CLI and authenticate with Artifactory using OAuth.",
       "files": [
         ".npmrc.tftpl",
         "README.md",
@@ -1560,8 +1821,8 @@
       "path": "catalog/modules/registry/coder/jfrog-token",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/jfrog-token",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Install the JF CLI and authenticate with Artifactory using Artifactory terraform provider.",
       "files": [
         ".npmrc.tftpl",
         "README.md",
@@ -1581,8 +1842,8 @@
       "path": "catalog/modules/registry/coder/jfrog-xray",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/jfrog-xray",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Fetch container image vulnerability scan results from JFrog Xray",
       "files": [
         "README.md",
         "main.test.ts",
@@ -1596,8 +1857,8 @@
       "path": "catalog/modules/registry/coder/jupyter-notebook",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/jupyter-notebook",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "A module that adds Jupyter Notebook in your Coder template.",
       "files": [
         "README.md",
         "main.test.ts",
@@ -1613,8 +1874,8 @@
       "path": "catalog/modules/registry/coder/jupyterlab",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/jupyterlab",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "A module that adds JupyterLab in your Coder template.",
       "files": [
         "README.md",
         "main.test.ts",
@@ -1630,8 +1891,8 @@
       "path": "catalog/modules/registry/coder/kasmvnc",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/kasmvnc",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "A modern open source VNC server",
       "files": [
         "README.md",
         "main.test.ts",
@@ -1647,8 +1908,8 @@
       "path": "catalog/modules/registry/coder/kiro",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/kiro",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Add a one-click button to launch Kiro IDE",
       "files": [
         "README.md",
         "kiro.tftest.hcl",
@@ -1663,8 +1924,8 @@
       "path": "catalog/modules/registry/coder/local-windows-rdp",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/local-windows-rdp",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Enable RDP on Windows and add a one-click Coder Desktop button for seamless access",
       "files": [
         "README.md",
         "configure-rdp.ps1",
@@ -1680,8 +1941,8 @@
       "path": "catalog/modules/registry/coder/personalize",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/personalize",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Allow developers to customize their workspace on start",
       "files": [
         "README.md",
         "main.test.ts",
@@ -1697,8 +1958,8 @@
       "path": "catalog/modules/registry/coder/portabledesktop",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/portabledesktop",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Install the portabledesktop binary for lightweight Linux desktop sessions.",
       "files": [
         "README.md",
         "main.test.ts",
@@ -1714,8 +1975,8 @@
       "path": "catalog/modules/registry/coder/rstudio-server",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/rstudio-server",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Deploy the Rocker Project distribution of RStudio Server in your Coder workspace.",
       "files": [
         "README.md",
         "main.tf",
@@ -1729,8 +1990,8 @@
       "path": "catalog/modules/registry/coder/slackme",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/slackme",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Send a Slack message when a command finishes inside a workspace!",
       "files": [
         "README.md",
         "main.test.ts",
@@ -1745,8 +2006,8 @@
       "path": "catalog/modules/registry/coder/supabase",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/supabase",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Install Supabase CLI and configure authentication via Coder external auth or access token",
       "files": [
         "README.md",
         "main.test.ts",
@@ -1761,8 +2022,8 @@
       "path": "catalog/modules/registry/coder/vault-cli",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/vault-cli",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Installs the Hashicorp Vault CLI and optionally configures token authentication",
       "files": [
         "README.md",
         "main.tf",
@@ -1777,8 +2038,8 @@
       "path": "catalog/modules/registry/coder/vault-github",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/vault-github",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Authenticates with Vault using GitHub",
       "files": [
         "README.md",
         "main.test.ts",
@@ -1793,8 +2054,8 @@
       "path": "catalog/modules/registry/coder/vault-jwt",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/vault-jwt",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Authenticates with Vault using a JWT from Coder's OIDC provider",
       "files": [
         "README.md",
         "main.test.ts",
@@ -1809,8 +2070,8 @@
       "path": "catalog/modules/registry/coder/vault-token",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/vault-token",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Authenticates with Vault using Token",
       "files": [
         "README.md",
         "main.test.ts",
@@ -1825,8 +2086,8 @@
       "path": "catalog/modules/registry/coder/vscode-desktop",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/vscode-desktop",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Add a one-click button to launch VS Code Desktop",
       "files": [
         "README.md",
         "main.test.ts",
@@ -1841,8 +2102,8 @@
       "path": "catalog/modules/registry/coder/vscode-desktop-core",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/vscode-desktop-core",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Building block for modules that need to link to an external VSCode-based IDE",
       "files": [
         "README.md",
         "main.test.ts",
@@ -1857,8 +2118,8 @@
       "path": "catalog/modules/registry/coder/vscode-web",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/vscode-web",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "VS Code Web - Visual Studio Code in the browser",
       "files": [
         "README.md",
         "main.test.ts",
@@ -1874,8 +2135,8 @@
       "path": "catalog/modules/registry/coder/windows-rdp",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/windows-rdp",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "RDP Server and Web Client, powered by Devolutions Gateway",
       "files": [
         "README.md",
         "devolutions-patch.js",
@@ -1893,8 +2154,8 @@
       "path": "catalog/modules/registry/coder/windsurf",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/windsurf",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Add a one-click button to launch Windsurf Editor",
       "files": [
         "README.md",
         "main.test.ts",
@@ -1908,8 +2169,8 @@
       "path": "catalog/modules/registry/coder/xum",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/xum",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Coding Agent Multiplexer - Run multiple AI agents in parallel",
       "files": [
         "README.md",
         "main.test.ts",
@@ -1925,8 +2186,8 @@
       "path": "catalog/modules/registry/coder/zed",
       "source": "https://github.com/coder/registry/tree/main/registry/coder/modules/zed",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Add a one-click button to launch Zed",
       "files": [
         "README.md",
         "main.test.ts",
@@ -1936,271 +2197,13 @@
     },
     {
       "kind": "module",
-      "namespace": "coder-labs",
-      "name": "archive",
-      "path": "catalog/modules/registry/coder-labs/archive",
-      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/archive",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "README.md",
-        "archive.tftest.hcl",
-        "main.test.ts",
-        "main.tf",
-        "run.sh"
-      ]
-    },
-    {
-      "kind": "module",
-      "namespace": "coder-labs",
-      "name": "auggie",
-      "path": "catalog/modules/registry/coder-labs/auggie",
-      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/auggie",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "README.md",
-        "main.test.ts",
-        "main.tf",
-        "main.tftest.hcl"
-      ]
-    },
-    {
-      "kind": "module",
-      "namespace": "coder-labs",
-      "name": "codex",
-      "path": "catalog/modules/registry/coder-labs/codex",
-      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/codex",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "README.md",
-        "main.test.ts",
-        "main.tf",
-        "main.tftest.hcl"
-      ]
-    },
-    {
-      "kind": "module",
-      "namespace": "coder-labs",
-      "name": "copilot",
-      "path": "catalog/modules/registry/coder-labs/copilot",
-      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/copilot",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "README.md",
-        "main.test.ts",
-        "main.tf",
-        "main.tftest.hcl"
-      ]
-    },
-    {
-      "kind": "module",
-      "namespace": "coder-labs",
-      "name": "cursor-cli",
-      "path": "catalog/modules/registry/coder-labs/cursor-cli",
-      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/cursor-cli",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "README.md",
-        "main.test.ts",
-        "main.tf",
-        "main.tftest.hcl"
-      ]
-    },
-    {
-      "kind": "module",
-      "namespace": "coder-labs",
-      "name": "kiro-crew",
-      "path": "catalog/modules/registry/coder-labs/kiro-crew",
-      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/kiro-crew",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "README.md",
-        "kiro-crew.tftest.hcl",
-        "main.test.ts",
-        "main.tf"
-      ]
-    },
-    {
-      "kind": "module",
-      "namespace": "coder-labs",
-      "name": "mcp-servers",
-      "path": "catalog/modules/registry/coder-labs/mcp-servers",
-      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/mcp-servers",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "README.md",
-        "auth.test.ts",
-        "main.test.ts",
-        "main.tf",
-        "main.tftest.hcl"
-      ]
-    },
-    {
-      "kind": "module",
-      "namespace": "coder-labs",
-      "name": "nextflow",
-      "path": "catalog/modules/registry/coder-labs/nextflow",
-      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/nextflow",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "README.md",
-        "main.tf",
-        "run.sh"
-      ]
-    },
-    {
-      "kind": "module",
-      "namespace": "coder-labs",
-      "name": "nix",
-      "path": "catalog/modules/registry/coder-labs/nix",
-      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/nix",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "README.md",
-        "develop.tf",
-        "main.test.ts",
-        "main.tf",
-        "main.tftest.hcl",
-        "nixos.tf"
-      ]
-    },
-    {
-      "kind": "module",
-      "namespace": "coder-labs",
-      "name": "open-webui",
-      "path": "catalog/modules/registry/coder-labs/open-webui",
-      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/open-webui",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "README.md",
-        "main.tf",
-        "main.tftest.hcl",
-        "run.sh"
-      ]
-    },
-    {
-      "kind": "module",
-      "namespace": "coder-labs",
-      "name": "opencode",
-      "path": "catalog/modules/registry/coder-labs/opencode",
-      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/opencode",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "README.md",
-        "main.test.ts",
-        "main.tf",
-        "main.tftest.hcl"
-      ]
-    },
-    {
-      "kind": "module",
-      "namespace": "coder-labs",
-      "name": "perplexica",
-      "path": "catalog/modules/registry/coder-labs/perplexica",
-      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/perplexica",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "README.md",
-        "main.tf",
-        "perplexica.tftest.hcl",
-        "run.sh"
-      ]
-    },
-    {
-      "kind": "module",
-      "namespace": "coder-labs",
-      "name": "pi",
-      "path": "catalog/modules/registry/coder-labs/pi",
-      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/pi",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "README.md",
-        "main.test.ts",
-        "main.tf",
-        "main.tftest.hcl"
-      ]
-    },
-    {
-      "kind": "module",
-      "namespace": "coder-labs",
-      "name": "pool",
-      "path": "catalog/modules/registry/coder-labs/pool",
-      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/pool",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "README.md",
-        "main.tf",
-        "main.tftest.hcl"
-      ]
-    },
-    {
-      "kind": "module",
-      "namespace": "coder-labs",
-      "name": "sourcegraph-amp",
-      "path": "catalog/modules/registry/coder-labs/sourcegraph-amp",
-      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/sourcegraph-amp",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "README.md",
-        "main.test.ts",
-        "main.tf",
-        "main.tftest.hcl"
-      ]
-    },
-    {
-      "kind": "module",
-      "namespace": "coder-labs",
-      "name": "ttyd",
-      "path": "catalog/modules/registry/coder-labs/ttyd",
-      "source": "https://github.com/coder/registry/tree/main/registry/coder-labs/modules/ttyd",
-      "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
-      "files": [
-        "README.md",
-        "main.test.ts",
-        "main.tf",
-        "run.sh"
-      ]
-    },
-    {
-      "kind": "module",
       "namespace": "cytoshahar",
       "name": "positron",
       "path": "catalog/modules/registry/cytoshahar/positron",
       "source": "https://github.com/coder/registry/tree/main/registry/cytoshahar/modules/positron",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Add a one-click button to launch Positron Desktop",
       "files": [
         "README.md",
         "main.test.ts",
@@ -2214,8 +2217,8 @@
       "path": "catalog/modules/registry/djarbz/copyparty",
       "source": "https://github.com/coder/registry/tree/main/registry/djarbz/modules/copyparty",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "A web based file explorer alternative to Filebrowser.",
       "files": [
         "README.md",
         "copyparty.tftest.hcl",
@@ -2230,8 +2233,8 @@
       "path": "catalog/modules/registry/droopy4096/mise-install",
       "source": "https://github.com/coder/registry/tree/main/registry/droopy4096/modules/mise-install",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Install mise and run `mise install` inside a cloned repository.",
       "files": [
         "README.md",
         "main.tf",
@@ -2245,8 +2248,8 @@
       "path": "catalog/modules/registry/dy-ma/tailscale",
       "source": "https://github.com/coder/registry/tree/main/registry/dy-ma/modules/tailscale",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Joins the workspace to your Tailscale network using OAuth or a pre-generated auth key.",
       "files": [
         "README.md",
         "install.sh",
@@ -2262,8 +2265,8 @@
       "path": "catalog/modules/registry/edd88-pixel/cloudcli",
       "source": "https://github.com/coder/registry/tree/main/registry/edd88-pixel/modules/cloudcli",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Run the CloudCLI web interface securely inside a Coder workspace",
       "files": [
         "README.md",
         "main.test.ts",
@@ -2278,8 +2281,8 @@
       "path": "catalog/modules/registry/edd88-pixel/open-collaboration-tools",
       "source": "https://github.com/coder/registry/tree/main/registry/edd88-pixel/modules/open-collaboration-tools",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Configure live collaborative editing with Open Collaboration Tools in Coder web IDEs",
       "files": [
         "README.md",
         "main.test.ts",
@@ -2294,8 +2297,8 @@
       "path": "catalog/modules/registry/gojnimer6553/happy",
       "source": "https://github.com/coder/registry/tree/main/registry/gojnimer6553/modules/happy",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Run Happy (slopus/happy) in a Coder workspace and pair your phone to Claude Code with a QR code or direct link.",
       "files": [
         "README.md",
         "main.test.ts",
@@ -2310,8 +2313,8 @@
       "path": "catalog/modules/registry/gojnimer6553/herdr",
       "source": "https://github.com/coder/registry/tree/main/registry/gojnimer6553/modules/herdr",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Run Herdr in a Coder workspace and opt in to installing Herdr plugins (e.g. 0cv/herdr-mobile-relay for remote phone control) non-interactively.",
       "files": [
         "README.md",
         "main.test.ts",
@@ -2326,8 +2329,8 @@
       "path": "catalog/modules/registry/harleylrn/kiro-cli",
       "source": "https://github.com/coder/registry/tree/main/registry/harleylrn/modules/kiro-cli",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Install and configure Kiro CLI in your workspace.",
       "files": [
         "README.md",
         "main.test.ts",
@@ -2342,8 +2345,8 @@
       "path": "catalog/modules/registry/harsh9485/jetbrains-plugins",
       "source": "https://github.com/coder/registry/tree/main/registry/harsh9485/modules/jetbrains-plugins",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Companion module for coder/jetbrains that automatically installs JetBrains Marketplace plugins.",
       "files": [
         "README.md",
         "jetbrains-plugins.tftest.hcl",
@@ -2357,8 +2360,8 @@
       "path": "catalog/modules/registry/kmjones1979/oneclaw",
       "source": "https://github.com/coder/registry/tree/main/registry/kmjones1979/modules/oneclaw",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Vault-backed secrets and MCP server wiring for 1Claw in Coder workspaces",
       "files": [
         "README.md",
         "main.test.ts",
@@ -2373,8 +2376,8 @@
       "path": "catalog/modules/registry/matifali/omnigent",
       "source": "https://github.com/coder/registry/tree/main/registry/matifali/modules/omnigent",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Run a private Omnigent multi-agent coding server in your workspace.",
       "files": [
         "README.md",
         "main.tf",
@@ -2388,8 +2391,8 @@
       "path": "catalog/modules/registry/mavrickrishi/auto-start-dev-server",
       "source": "https://github.com/coder/registry/tree/main/registry/mavrickrishi/modules/auto-start-dev-server",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Automatically detect and start development servers for various project types",
       "files": [
         "README.md",
         "main.test.ts",
@@ -2404,8 +2407,8 @@
       "path": "catalog/modules/registry/mavrickrishi/aws-ami-snapshot",
       "source": "https://github.com/coder/registry/tree/main/registry/mavrickrishi/modules/aws-ami-snapshot",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Create and manage AMI snapshots for Coder workspaces with restore capabilities",
       "files": [
         "README.md",
         "main.test.ts",
@@ -2419,8 +2422,8 @@
       "path": "catalog/modules/registry/mavrickrishi/nexus-repository",
       "source": "https://github.com/coder/registry/tree/main/registry/mavrickrishi/modules/nexus-repository",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Configure package managers to use Sonatype Nexus Repository for Maven, npm, PyPI, and Docker registries.",
       "files": [
         "README.md",
         "main.test.ts",
@@ -2435,8 +2438,8 @@
       "path": "catalog/modules/registry/nataindata/apache-airflow",
       "source": "https://github.com/coder/registry/tree/main/registry/nataindata/modules/apache-airflow",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "A module that adds Apache Airflow in your Coder template",
       "files": [
         "README.md",
         "main.test.ts",
@@ -2451,8 +2454,8 @@
       "path": "catalog/modules/registry/thezoker/nodejs",
       "source": "https://github.com/coder/registry/tree/main/registry/thezoker/modules/nodejs",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "Install Node.js via nvm",
       "files": [
         "README.md",
         "main.test.ts",
@@ -2468,8 +2471,8 @@
       "path": "catalog/modules/registry/umair/digitalocean-region",
       "source": "https://github.com/coder/registry/tree/main/registry/umair/modules/digitalocean-region",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "A parameter with human region names and icons",
       "files": [
         "README.md",
         "main.test.ts",
@@ -2483,8 +2486,8 @@
       "path": "catalog/modules/registry/whizus/exoscale-instance-type",
       "source": "https://github.com/coder/registry/tree/main/registry/whizus/modules/exoscale-instance-type",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "A parameter with human readable exoscale instance names",
       "files": [
         "README.md",
         "main.test.ts",
@@ -2498,8 +2501,8 @@
       "path": "catalog/modules/registry/whizus/exoscale-zone",
       "source": "https://github.com/coder/registry/tree/main/registry/whizus/modules/exoscale-zone",
       "commit": "7a9d10f80b3c5e9e235dbefe1c9c89806ad5344c",
-      "license": null,
-      "description": "---",
+      "license": "Apache-2.0",
+      "description": "A parameter with human zone names and icons",
       "files": [
         "README.md",
         "main.test.ts",
