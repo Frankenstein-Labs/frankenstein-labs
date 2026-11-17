@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 const port = Number(process.env.PORT || 3000);
-const coderUrl = (process.env.CODER_ACCESS_URL || '').replace(/\/$/, '');
+const coderUrl = (process.env.CODER_INTERNAL_URL || process.env.CODER_ACCESS_URL || '').replace(/\/$/, '');
 const coderToken = process.env.CODER_SESSION_TOKEN || '';
 const apiSecret = process.env.FRANKENSTEIN_API_SECRET || '';
 const root = new URL('../..', import.meta.url).pathname;
@@ -24,7 +24,7 @@ const coder = async (path, request) => {
 createServer(async (request, response) => {
   try {
     const url = new URL(request.url || '/', `http://${request.headers.host || 'localhost'}`);
-    if (url.pathname === '/healthz') return json(response, { ok: true, coderConfigured: Boolean(coderUrl && coderToken) });
+    if (url.pathname === '/healthz') return json(response, { ok: true, coderConfigured: Boolean(coderUrl && coderToken), publicCoderUrl: process.env.CODER_ACCESS_URL || null });
     if (!authorized(request)) return json(response, { error: 'unauthorized' }, 401);
     if (url.pathname === '/api/catalog') return json(response, await loadCatalog());
     if (url.pathname.startsWith('/api/coder/')) {

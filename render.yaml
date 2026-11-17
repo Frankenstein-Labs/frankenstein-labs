@@ -4,7 +4,7 @@ services:
     runtime: image
     image:
       url: ghcr.io/coder/coder:latest
-    plan: standard
+    plan: 2c-4g
     envVars:
       - key: CODER_ACCESS_URL
         sync: false
@@ -20,15 +20,18 @@ services:
     runtime: docker
     dockerfilePath: ./services/api/Dockerfile
     dockerContext: .
-    plan: starter
+    plan: 0.5c-512mb
+    healthCheckPath: /healthz
     envVars:
       - key: PORT
         value: 3000
-      - key: CODER_ACCESS_URL
+      - key: CODER_INTERNAL_URL
         fromService:
           type: pserv
           name: frankenstein-coder
-          property: host
+          property: hostport
+      - key: CODER_ACCESS_URL
+        sync: false
       - key: CODER_SESSION_TOKEN
         sync: false
       - key: FRANKENSTEIN_API_SECRET
@@ -45,9 +48,9 @@ services:
   - type: worker
     name: frankenstein-catalog-worker
     runtime: docker
-    dockerfilePath: ./services/api/Dockerfile
+    dockerfilePath: ./services/worker/Dockerfile
     dockerContext: .
-    plan: starter
+    plan: 0.5c-512mb
     dockerCommand: node services/worker/worker.mjs
     envVars:
       - key: CODER_ACCESS_URL

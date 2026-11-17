@@ -5,7 +5,5 @@ COPY services/worker/package.json ./services/worker/package.json
 COPY services/worker/worker.mjs ./services/worker/worker.mjs
 COPY scripts ./scripts
 COPY catalog ./catalog
-COPY vendor/coder/.git ./vendor/coder/.git
-COPY vendor/registry/.git ./vendor/registry/.git
 ENV NODE_ENV=production
 CMD ["node", "services/worker/worker.mjs"]
