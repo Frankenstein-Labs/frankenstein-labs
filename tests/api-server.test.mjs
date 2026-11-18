@@ -1,5 +1,6 @@
 import { spawn } from 'node:child_process';
 import { createServer } from 'node:net';
+import { createServer as createHttpServer } from 'node:http';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { after, before, describe, it } from 'node:test';
@@ -107,6 +108,33 @@ describe('frankenstein-labs API', () => {
     });
     assert.equal(response.status, 403);
     assert.deepEqual(await response.json(), { error: 'coder_route_not_allowed' });
+  });
+
+  it('preserves an upstream Coder auth failure as a JSON 401', async () => {
+    const coder = createHttpServer((_request, response) => {
+      response.writeHead(401, { 'content-type': 'text/html; charset=utf-8' });
+      response.end('<html>session expired</html>');
+    });
+    await new Promise((resolve) => coder.listen(0, '127.0.0.1', resolve));
+    const coderPort = coder.address().port;
+    const isolatedPort = await freePort();
+    let isolated;
+    try {
+      ({ child: isolated } = await startServer({
+        PORT: String(isolatedPort),
+        FRANKENSTEIN_API_SECRET: SECRET,
+        CODER_ACCESS_URL: `http://127.0.0.1:${coderPort}`,
+        CODER_SESSION_TOKEN: 'expired-test-token',
+      }));
+      const response = await fetch(`http://127.0.0.1:${isolatedPort}/api/coder/api/v2/templates`, {
+        headers: { 'x-frankenstein-api-secret': SECRET },
+      });
+      assert.equal(response.status, 401);
+      assert.deepEqual(await response.json(), { error: 'coder_authentication_failed' });
+    } finally {
+      await stopServer(isolated);
+      await new Promise((resolve) => coder.close(resolve));
+    }
   });
 
   it('refuses to start without an API secret', async () => {

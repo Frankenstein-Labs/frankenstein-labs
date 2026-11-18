@@ -13,7 +13,10 @@ const normalizeUrl = (value) => {
   if (!trimmed) return '';
   return /^https?:\/\//.test(trimmed) ? trimmed : `http://${trimmed}`;
 };
-const coderUrl = normalizeUrl(process.env.CODER_INTERNAL_URL || process.env.CODER_ACCESS_URL);
+// Prefer the explicitly configured public Coder URL when the new control plane
+// is hosted as a separate Render service. The legacy private-service variable
+// may still exist during migration and must not silently win.
+const coderUrl = normalizeUrl(process.env.CODER_ACCESS_URL || process.env.CODER_INTERNAL_URL);
 const coderToken = process.env.CODER_SESSION_TOKEN || '';
 const apiSecret = process.env.FRANKENSTEIN_API_SECRET || '';
 const allowInsecure = process.env.ALLOW_INSECURE_NO_AUTH === '1';
@@ -109,8 +112,25 @@ const coder = async (path, request) => {
   try {
     return { status: result.status, payload: JSON.parse(text) };
   } catch {
-    // The upstream did not return JSON (e.g. an HTML error page): do not leak it.
-    throw Object.assign(new Error('Coder upstream returned a non-JSON response'), { statusCode: 502 });
+    // Preserve an upstream auth/client failure instead of misreporting it as a
+    // gateway failure. Never forward the upstream body because it may be HTML
+    // or contain implementation details.
+    if (result.status === 401 || result.status === 403) {
+      throw Object.assign(new Error('Coder authentication failed'), {
+        statusCode: result.status,
+        publicMessage: 'coder_authentication_failed',
+      });
+    }
+    if (result.status >= 400 && result.status < 500) {
+      throw Object.assign(new Error('Coder upstream rejected the request'), {
+        statusCode: result.status,
+        publicMessage: 'coder_upstream_rejected',
+      });
+    }
+    throw Object.assign(new Error(`Coder upstream returned a non-JSON response (status ${result.status})`), {
+      statusCode: 502,
+      publicMessage: 'coder_upstream_invalid_response',
+    });
   }
 };
 
@@ -177,7 +197,11 @@ const start = async () => {
       log('error', 'request failed', { path: request.url, status, reason: error instanceof Error ? error.message : 'unknown' });
       // Only the explicit, already-sanitized status codes carry a message; any
       // unexpected failure returns a generic body so internals never leak.
-      const message = status === 500 ? 'internal_error' : (error instanceof Error ? error.message : 'internal_error');
+      const message = status === 500
+        ? 'internal_error'
+        : (error && typeof error.publicMessage === 'string'
+          ? error.publicMessage
+          : (error instanceof Error ? error.message : 'internal_error'));
       return json(response, { error: message }, status);
     }
   });
