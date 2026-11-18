@@ -1,0 +1,28 @@
+# Free-mode preparation only. Do not use this blueprint to claim Coder provisioning.
+# It runs the catalog/API surface without a Coder service or database.
+# Render free web services may sleep; the API is therefore unsuitable for
+# latency-sensitive provisioning and has no durable business database here.
+services:
+  - type: web
+    name: frankenstein-api-catalog-free
+    runtime: docker
+    dockerfilePath: ./services/api/Dockerfile
+    dockerContext: .
+    plan: free
+    healthCheckPath: /healthz
+    envVars:
+      - key: PORT
+        value: 3000
+      - key: NODE_ENV
+        value: production
+      - key: CATALOG_INDEX
+        value: /app/catalog/index.json
+      - key: FRANKENSTEIN_API_SECRET
+        generateValue: true
+      # Intentionally unset: no Coder proxy or provisioning in free mode.
+      - key: CODER_INTERNAL_URL
+        sync: false
+      - key: CODER_SESSION_TOKEN
+        sync: false
+      - key: FRANKENSTEIN_DATABASE_URL
+        sync: false

@@ -114,6 +114,33 @@ const coder = async (path, request) => {
   }
 };
 
+// The API secret is a service credential, not a license to reach every Coder
+// route. Keep the public facade limited to the Marketplace contract; new Coder
+// endpoints must be reviewed and added explicitly.
+const coderRouteAllowed = (method, path) => {
+  const read = method === 'GET' || method === 'HEAD';
+  if (read && [
+    /^\/api\/v2\/buildinfo$/,
+    /^\/api\/v2\/organizations$/,
+    /^\/api\/v2\/organizations\/[^/]+\/provisionerdaemons$/,
+    /^\/api\/v2\/organizations\/[^/]+\/provisionerjobs$/,
+    /^\/api\/v2\/templates$/,
+    /^\/api\/v2\/users$/,
+    /^\/api\/v2\/users\/[^/]+\/workspaces$/,
+    /^\/api\/v2\/workspaces$/,
+    /^\/api\/v2\/workspaces\/[^/]+$/,
+    /^\/api\/v2\/workspaces\/[^/]+\/builds$/,
+    /^\/api\/v2\/workspacebuilds\/[^/]+$/,
+    /^\/api\/v2\/workspacebuilds\/[^/]+\/logs$/,
+  ].some((pattern) => pattern.test(path))) return true;
+  if (method === 'POST' && [
+    /^\/api\/v2\/users$/,
+    /^\/api\/v2\/users\/[^/]+\/workspaces$/,
+    /^\/api\/v2\/workspaces\/[^/]+\/builds$/,
+  ].some((pattern) => pattern.test(path))) return true;
+  return method === 'DELETE' && /^\/api\/v2\/workspaces\/[^/]+$/.test(path);
+};
+
 const start = async () => {
   if (!apiSecret && !allowInsecure) {
     throw new Error('FRANKENSTEIN_API_SECRET is required (set ALLOW_INSECURE_NO_AUTH=1 only for local development)');
@@ -138,6 +165,9 @@ const start = async () => {
       if (!authorized(request)) return json(response, { error: 'unauthorized' }, 401);
       if (url.pathname === '/api/catalog') return json(response, await loadCatalog(catalogPath));
       if (url.pathname.startsWith('/api/coder/')) {
+        if (!coderRouteAllowed(request.method || 'GET', url.pathname.replace('/api/coder', ''))) {
+          return json(response, { error: 'coder_route_not_allowed' }, 403);
+        }
         const upstream = await coder(url.pathname.replace('/api/coder', '') + url.search, request);
         return json(response, upstream.payload, upstream.status);
       }

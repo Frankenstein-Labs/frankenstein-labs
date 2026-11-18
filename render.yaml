@@ -67,6 +67,9 @@ services:
       # Shared secret required by every /api/* request (x-frankenstein-api-secret).
       - key: FRANKENSTEIN_API_SECRET
         generateValue: true
+      # Separate business database; intentionally unconfigured until approved.
+      - key: FRANKENSTEIN_DATABASE_URL
+        sync: false
       - key: STORAGE_ENDPOINT
         sync: false
       - key: STORAGE_ACCESS_KEY

@@ -37,4 +37,4 @@ tant que les commits amont sont inchangés. `scripts/validate-catalog.sh`
 
 Pour une exécution locale, renseignez `.env` à partir de `.env.example`, puis utilisez `docker compose up`. Les secrets doivent rester hors Git.
 
-Voir [ARCHITECTURE.md](ARCHITECTURE.md), [docs/RENDER_DEPLOYMENT.md](docs/RENDER_DEPLOYMENT.md) et [VALIDATION.md](VALIDATION.md).
+Voir [ARCHITECTURE.md](ARCHITECTURE.md), [INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md), [docs/RENDER_DEPLOYMENT.md](docs/RENDER_DEPLOYMENT.md), [docs/RENDER_FREE_MODE.md](docs/RENDER_FREE_MODE.md) et [VALIDATION.md](VALIDATION.md).

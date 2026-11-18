@@ -97,8 +97,16 @@ describe('frankenstein-labs API', () => {
   });
 
   it('returns 503 when the Coder upstream is not configured', async () => {
-    const response = await fetch(url('/api/coder/users/me'), { headers: { 'x-frankenstein-api-secret': SECRET } });
+    const response = await fetch(url('/api/coder/api/v2/buildinfo'), { headers: { 'x-frankenstein-api-secret': SECRET } });
     assert.equal(response.status, 503);
+  });
+
+  it('blocks Coder routes outside the Marketplace allowlist', async () => {
+    const response = await fetch(url('/api/coder/api/v2/admin/users'), {
+      headers: { 'x-frankenstein-api-secret': SECRET }
+    });
+    assert.equal(response.status, 403);
+    assert.deepEqual(await response.json(), { error: 'coder_route_not_allowed' });
   });
 
   it('refuses to start without an API secret', async () => {
